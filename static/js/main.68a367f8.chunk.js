@@ -1,0 +1,2 @@
+(this["webpackJsonpreactive-calendar"]=this["webpackJsonpreactive-calendar"]||[]).push([[0],{10:function(e,t,c){"use strict";c.r(t);var n=c(1),r=c.n(n),a=c(3),i=c.n(a),s=(c(8),c(0));var d=function(){return Object(s.jsx)("div",{className:"App",children:Object(s.jsx)("h1",{children:"It's working"})})};i.a.render(Object(s.jsx)(r.a.StrictMode,{children:Object(s.jsx)(d,{})}),document.getElementById("root"))},8:function(e,t,c){}},[[10,1,2]]]);
+//# sourceMappingURL=main.68a367f8.chunk.js.map
