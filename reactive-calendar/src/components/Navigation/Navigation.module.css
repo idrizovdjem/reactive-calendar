@@ -1,0 +1,11 @@
+.Navigation {
+    width: 100%;
+    height: 6vh;
+    background-color: #406E8E;
+}
+
+.Logo {
+    margin: 0 10px;
+    color: white;
+    font-size: 4vh;
+}
