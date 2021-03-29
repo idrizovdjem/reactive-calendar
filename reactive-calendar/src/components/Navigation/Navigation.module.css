@@ -9,3 +9,21 @@
     color: white;
     font-size: 4vh;
 }
+
+.NavigationButton {
+    float: right;
+    background-color: transparent;
+    border: none;
+    font-size: 3.5vh;
+    color: white;
+    margin: 0.5vh 10px;
+    padding-bottom: 0.5vh;
+    border-radius: 10px;
+    transition: background-color 0.2s;
+}
+
+.NavigationButton:hover {
+    cursor: pointer;
+    background-color: white;
+    color: #406E8E;
+}
