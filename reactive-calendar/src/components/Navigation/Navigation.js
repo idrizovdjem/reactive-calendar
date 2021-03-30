@@ -4,6 +4,7 @@ import classes from './Navigation.module.css';
 const Navigation = (props) => {
     let buttons = null;
 
+    // TODO: Implement page changing
     if(props.isUserAuthenticated) {
         buttons = (
             <span>
