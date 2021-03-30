@@ -10,6 +10,10 @@ class App extends Component {
     currentPage: 'Register'
   };
 
+  changePage = (page) => {
+    this.setState({ currentPage: page });
+  }
+
   render() {
     let renderElement = null;
     if(this.state.currentPage === 'Login') {
@@ -21,7 +25,8 @@ class App extends Component {
     return (
       <div>
         <Navigation 
-          isUserAuthenticated={this.state.isUserAuthenticated}/>
+          isUserAuthenticated={this.state.isUserAuthenticated}
+          redirect={this.changePage} />
           {renderElement}
       </div>
     );
