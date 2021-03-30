@@ -14,7 +14,7 @@ class Login extends Component {
                 <form>
                     <div className="form-group">
                         <label>Email address</label>
-                        <input type="email" className="form-control" aria-describedby="emailHelp" placeholder="Enter your email" />
+                        <input type="email" className="form-control" placeholder="Enter your email" />
                     </div>
 
                     <div className="form-group">
