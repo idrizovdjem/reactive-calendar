@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import classes from './Calendar.module.css';
+import calendarService from '../../services/calendarService.js';
 
 import CalendarRow from './CalendarRow/CalendarRow';
 
 class Calendar extends Component {
     render() {
+        const days = calendarService.getCalendarDays();
+
         return (
             <table className={classes.Calendar}>
                 <thead>
