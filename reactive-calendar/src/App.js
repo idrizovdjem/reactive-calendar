@@ -4,11 +4,12 @@ import Navigation from './components/Navigation/Navigation';
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import Calendar from './components/Calendar/Calendar';
+import Todo from './components/Todo/Todo';
 
 class App extends Component {
   state = {
     isUserAuthenticated: true,
-    currentPage: 'Calendar'
+    currentPage: 'Todo'
   };
 
   changePage = (page) => {
@@ -23,6 +24,8 @@ class App extends Component {
       renderElement = <Register />
     } else if(this.state.currentPage === 'Calendar') {
       renderElement = <Calendar />
+    } else if(this.state.currentPage === 'Todo') {
+      renderElement = <Todo />
     }
 
     return (

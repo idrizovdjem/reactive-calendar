@@ -2,6 +2,7 @@
     width: 70vw;
     margin: 1vh auto;
     height: 90vh;
+    user-select: none;
 }
 
 thead tr {
