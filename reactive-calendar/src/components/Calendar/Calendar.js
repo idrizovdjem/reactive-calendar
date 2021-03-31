@@ -5,8 +5,39 @@ import calendarService from '../../services/calendarService.js';
 import CalendarRow from './CalendarRow/CalendarRow';
 
 class Calendar extends Component {
+    state = {
+        days: [],
+        date: {}
+    };
+
+    componentDidMount() {
+        this.updateDate();
+    }
+
+    updateDate = () => {
+        const currentDate = calendarService.getCurrentDate();
+        const { year, month } = currentDate;
+        const currentDays = calendarService.getCalendarDays(year, month);
+
+        this.setState({
+            days: [...currentDays],
+            date: currentDate
+        });
+    }
+
     render() {
-        const days = calendarService.getCalendarDays();
+        const calendarRows = [];
+        if (this.state.days.length !== 0) {
+            let next = 0;
+            for (let i = 0; i < 5; i++) {
+                const currentRowDays = [];
+                for (let j = 0; j < 7; j++) {
+                    currentRowDays.push(this.state.days[next++]);
+                }
+
+                calendarRows.push(<CalendarRow key={i} days={currentRowDays} />);
+            }
+        }
 
         return (
             <table className={classes.Calendar}>
@@ -22,11 +53,7 @@ class Calendar extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    <CalendarRow />
-                    <CalendarRow />
-                    <CalendarRow />
-                    <CalendarRow />
-                    <CalendarRow />
+                    {calendarRows}
                 </tbody>
             </table>
         );

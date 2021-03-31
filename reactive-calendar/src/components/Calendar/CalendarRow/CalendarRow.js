@@ -5,15 +5,17 @@ import CalendarBox from './CalendarBox/CalendarBox';
 
 class CalendarRow extends Component {
     render() {
+        const boxArray = [];
+        if(this.props.days.length > 0) {
+            for(let i = 0; i < this.props.days.length; i++) {
+                const date = this.props.days[i];
+                boxArray.push(<CalendarBox key={i} date={date} />);
+            }
+        }
+
         return (
             <tr className={classes.Row}>
-                <CalendarBox />
-                <CalendarBox />
-                <CalendarBox />
-                <CalendarBox />
-                <CalendarBox />
-                <CalendarBox />
-                <CalendarBox />
+                {boxArray}
             </tr>
         );
     }
