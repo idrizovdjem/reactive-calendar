@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classes from './CalendarRow.module.css';
 
-import CalendarBox from './CalendarBox/CalendarBox.js';
+import CalendarBox from './CalendarBox/CalendarBox';
 
 class CalendarRow extends Component {
     render() {

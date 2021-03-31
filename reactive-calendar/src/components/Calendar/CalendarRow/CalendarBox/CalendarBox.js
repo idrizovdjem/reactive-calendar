@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classes from './CalendarBox.module.css';
 
+import CalendarTodo from './CalendarTodo/CalendarTodo'
+
 class CalendarBox extends Component {
 
     render() {
@@ -16,7 +18,8 @@ class CalendarBox extends Component {
                     </div>
                 </span>
                 <span className={classes.SecondRow}>
-
+                    <CalendarTodo text={'Implem...'}/>
+                    <CalendarTodo text={'Implem...'}/>
                 </span>
             </td>
         );

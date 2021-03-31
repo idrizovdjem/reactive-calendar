@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import Navigation from './components/Navigation/Navigation.js';
-import Login from './components/Login/Login.js';
-import Register from './components/Register/Register.js';
-import Calendar from './components/Calendar/Calendar.js';
+import Navigation from './components/Navigation/Navigation';
+import Login from './components/Login/Login';
+import Register from './components/Register/Register';
+import Calendar from './components/Calendar/Calendar';
 
 class App extends Component {
   state = {
