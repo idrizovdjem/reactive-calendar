@@ -1,0 +1,40 @@
+.Box {
+    border: 1px solid black;
+    margin: 0;
+    padding: 0;
+}
+
+.Box:hover {
+    background-color: gainsboro;
+    cursor: pointer;
+}
+
+.FirstRow, .SecondRow {
+    width: 100%;
+    height: 8.5vh;
+    float: left;
+}
+
+.LeftBox, .RightBox {
+    float: left;
+    width: 50%;
+    height: 8.5vh;
+}
+
+.ColorBox {
+    float: left;
+    width: 50%;
+    height: 4.25vh;
+    background-color: green;
+    outline: 1px solid black;
+}
+
+.Number {
+    font-size: 5vh;
+}
+
+@media screen and (max-width: 600px) {
+    .Number {
+        font-size: 4vh;
+    }
+}

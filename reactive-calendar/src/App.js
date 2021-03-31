@@ -3,11 +3,12 @@ import React, { Component } from 'react';
 import Navigation from './components/Navigation/Navigation.js';
 import Login from './components/Login/Login.js';
 import Register from './components/Register/Register.js';
+import Calendar from './components/Calendar/Calendar.js';
 
 class App extends Component {
   state = {
-    isUserAuthenticated: false,
-    currentPage: 'Register'
+    isUserAuthenticated: true,
+    currentPage: 'Calendar'
   };
 
   changePage = (page) => {
@@ -20,6 +21,8 @@ class App extends Component {
       renderElement = <Login />
     } else if(this.state.currentPage === 'Register') {
       renderElement = <Register />
+    } else if(this.state.currentPage === 'Calendar') {
+      renderElement = <Calendar />
     }
 
     return (

@@ -1,0 +1,23 @@
+.Calendar {
+    width: 70vw;
+    margin: 1vh auto;
+    height: 90vh;
+}
+
+thead tr {
+    width: 100%;
+    height: 3vh;
+    font-size: 3vh;
+    text-align: center;
+}
+
+thead th {
+    width: 10vw;
+    border: 1px solid black;
+}
+
+@media screen and (max-width: 600px) {
+    .Calendar {
+        width: 95%;
+    }
+}
