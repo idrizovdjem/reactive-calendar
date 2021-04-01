@@ -1,0 +1,61 @@
+.TodoForm {
+    width: 55vw;
+    border: 1px solid black;
+    height: 49vh;
+    margin-top: 1vh;
+    float: left;
+}
+
+.TitleInput {
+    width: 90%;
+    margin-left: 5%;
+    font-size: 3vh;
+    padding-left: 5px;
+    border: 2px solid lightgray;
+    border-radius: 5px;
+    outline: none;
+    height: 6vh;
+}
+
+.TitleInput:focus {
+    border-color: black;
+}
+
+.Textarea {
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 1%;
+    font-size: 3vh;
+    border: 2px solid lightgray;
+    outline: none;
+    border-radius: 2px;
+    height: 25vh;
+}
+
+.Textarea:focus {
+    border-color: black;
+}
+
+.CreateButton {
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 1%;
+    height: 7vh;
+    font-size: 4vh;
+    background-color: #1E3888;
+    border: 2px solid #1E3888;
+    border-radius: 5px;
+    color: white;
+}
+
+.CreateButton:hover {
+    color: #1E3888;
+    background-color: white;
+    cursor: pointer;
+}
+
+.TitleLabel {
+    margin-left: 5%;
+    font-size: 4vh;
+    height: 5vh;
+}

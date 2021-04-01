@@ -1,0 +1,15 @@
+.Label {
+    width: 23vw;
+    height: 5vh;    
+}
+
+.LabelText {
+    margin: 0;
+    padding: 0;
+    font-size: 3vh;
+    height: 5vh;
+    background-color: blueviolet;
+    color: white;
+    width: 100%;
+    padding-left: 1vw;
+}

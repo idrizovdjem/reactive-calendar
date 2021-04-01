@@ -1,0 +1,8 @@
+.TodoLabels {
+    width: 23vw;
+    outline: 1px solid black;
+    float: left;
+    height: 49vh;
+    margin-top: 1vh;
+    margin-left: 3vh;
+}

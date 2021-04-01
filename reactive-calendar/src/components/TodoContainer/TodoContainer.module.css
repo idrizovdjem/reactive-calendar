@@ -3,6 +3,7 @@
     margin: auto;
     height: 93vh;
     text-align: center;
+    overflow-x: hidden;
 }
 
 .CurrentDate {
@@ -22,14 +23,20 @@
 }
 
 .Add {
-    float: right;
-    font-size: 5vh;
-    margin-right: 1vh;
+    font-size: 4.5vh;
+    margin-left: 3vh;
+    color: gray;
 }
 
 .Add:hover {
-    color: blue;
+    color: black;
     cursor: pointer;
+}
+
+.Form {
+    width: 80vw;
+    height: 50vh;
+    margin-bottom: 2vh;
 }
 
 @media screen and (max-width: 600px) {
