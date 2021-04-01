@@ -1,0 +1,39 @@
+.TodoContainer {
+    width: 100vw;
+    margin: auto;
+    height: 93vh;
+    text-align: center;
+}
+
+.CurrentDate {
+    font-size: 5vh;
+    margin: 0;
+}
+
+.TodoSection {
+    width: 80vw;
+    margin-top: 2vh;
+    margin-left: 10vw;
+    text-align: left;
+}
+
+.TodoSectionText {
+    font-size: 5vh; 
+}
+
+.Add {
+    float: right;
+    font-size: 5vh;
+    margin-right: 1vh;
+}
+
+.Add:hover {
+    color: blue;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+    .TodoContainer {
+        width: 95%;
+    }
+}

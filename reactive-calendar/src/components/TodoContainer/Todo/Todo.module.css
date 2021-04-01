@@ -1,0 +1,35 @@
+.Todo {
+    width: 80vw;
+    height: 8vh;
+    background-color: blueviolet;
+    border-radius: 5px;
+    margin-bottom: 1vh;
+}
+
+.TodoText {
+    overflow-x: hidden;
+    width: 70vw;
+    height: 8vh;
+    font-size: 5vh;
+    color: white;
+    padding-left: 2vh;
+    float: left;
+}
+
+.Icon {
+    float: right;
+    font-size: 5vh;
+    margin-top: 1.5vh;
+    color: white;
+    margin-right: 3vh;
+}
+
+.Icon:hover {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+    .TodoText {
+        width: 60vw;
+    }
+}

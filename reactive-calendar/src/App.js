@@ -4,7 +4,7 @@ import Navigation from './components/Navigation/Navigation';
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import Calendar from './components/Calendar/Calendar';
-import Todo from './components/Todo/Todo';
+import TodoContainer from './components/TodoContainer/TodoContainer';
 
 class App extends Component {
   state = {
@@ -25,7 +25,7 @@ class App extends Component {
     } else if(this.state.currentPage === 'Calendar') {
       renderElement = <Calendar />
     } else if(this.state.currentPage === 'Todo') {
-      renderElement = <Todo />
+      renderElement = <TodoContainer />
     }
 
     return (
