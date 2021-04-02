@@ -48,6 +48,52 @@ async function register(email, username, password) {
     return response;
 }
 
+async function login(email, password) {
+    const response = {
+        successfull: true,
+        errorMessages: [],
+        data: {}
+    };
+
+    // * simple input data validations
+    if (!email || email.length < 5) {
+        addErrorMessage(response, 'Invalid email!');
+    }
+
+    if (!password || password.length < 6) {
+        addErrorMessage(response, 'Password must be at least 6 symbols long!');
+    }
+
+    if(response.successfull) {
+        const hash = hashPassword(password);
+        const userResult = await User.findOne({
+            attributes: ['id'],
+            where: {
+                email: email,
+                password: hash
+            }
+        });
+
+        if(userResult === null) {
+            addErrorMessage(response, 'Invalid login information!');
+            return response;
+        }
+
+        const userId = userResult.dataValues.id;
+
+        const authToken = await Session.findOne({
+            attributes: ['token'],
+            where: {
+                userId: userId
+            }
+        });
+
+        response.data.authToken = authToken;
+    }
+
+    return response;
+}
+
 function addErrorMessage(response, message) {
     response.successfull = false;
     response.errorMessages.push(message);
@@ -80,5 +126,6 @@ function hashPassword(password) {
 }
 
 module.exports = {
-    register
+    register,
+    login
 };

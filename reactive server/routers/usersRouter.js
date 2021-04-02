@@ -3,8 +3,9 @@ const router = express.Router();
 const authService = require('../services/authService.js');
 
 router.post('/login', async(request, response) => {
-    // TODO: implement 
-    response.json({ successfull: true });
+    const { email, password } = request.body;
+    const result = await authService.login(email, password);
+    response.json({ result });
 });
 
 router.post('/register', async(request, response) => {
