@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classes from './TodoContainer.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 import Todo from './Todo/Todo';
 import TodoForm from './TodoForm/TodoForm';
@@ -27,8 +27,41 @@ class TodoContainer extends Component {
                 },
                 isChecked: false
             }
-        ]
+        ],
+        currentTodo: {
+            title: null,
+            description: null,
+            label: null
+        }
     };
+
+    createTodoHandler = (title, description) => {
+        if(!this.state.currentTodo.label) {
+            alert('Choose label');
+            return;
+        }
+
+        const currentTodo = this.state.currentTodo;
+        currentTodo.title = title;
+        currentTodo.description = description;
+
+        const todos = this.state.todos;
+        this.setState({ 
+            todos: [ ...todos, currentTodo ],
+            currentTodo: {
+                title: null,
+                description: null,
+                label: null
+            },
+            showCreateForm: false
+        });
+    }
+
+    changeTodoLabelHandler = (label) => {
+        const currentTodo = this.state.currentTodo;
+        currentTodo.label = label;
+        this.setState({ currentTodo: currentTodo });
+    }
 
     toggleCreateFormVisibility = () => {
         this.setState({ showCreateForm: !this.state.showCreateForm });
@@ -39,8 +72,8 @@ class TodoContainer extends Component {
         if (this.state.showCreateForm) {
             createForm = (
                 <div className={classes.Form}>
-                    <TodoForm />
-                    <TodoLabels />
+                    <TodoForm create={this.createTodoHandler} />
+                    <TodoLabels change={this.changeTodoLabelHandler} />
                 </div>
             );
         }
@@ -48,7 +81,7 @@ class TodoContainer extends Component {
         let todos = [];
         if(this.state.todos.length > 0) {
             for(const todo of this.state.todos) {
-                const element = <Todo title={todo.title} label={todo.label} isChecked={todo.isChecked} />
+                const element = <Todo title={todo.title} label={todo.label} isChecked={todo.isChecked} key={todo.title} />
                 todos.push(element);
             }
         }

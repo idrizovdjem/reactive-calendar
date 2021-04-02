@@ -16,14 +16,13 @@ class Todo extends Component {
     changeCheckedHandler = () => {
         // TODO: change todo isChecked
         const nextIcon = this.state.icon === faSquare ? faCheckSquare : faSquare;
-        this.setState({ icon : nextIcon });
+        this.setState({ icon: nextIcon });
     }
 
     render() {
-
         return (
             <div style={this.props.label} className={classes.Todo}>
-                <div className={classes.TodoText}>
+                <div style={{ color: this.props.label.color }} className={classes.TodoText}>
                     {this.props.title}
                 </div>
                 <FontAwesomeIcon onClick={this.changeCheckedHandler} icon={this.state.icon} className={classes.Icon} />
