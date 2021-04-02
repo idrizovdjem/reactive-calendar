@@ -3,12 +3,15 @@ import { Redirect } from 'react-router-dom';
 import authService from '../../services/authService.js';
 import classes from './Register.module.css';
 
+import Alert from '../Alert/Alert';
+
 class Register extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            successfullRegister: false
+            successfullRegister: false,
+            errorMessages: []
         };
 
         this.emailInput = React.createRef(null);
@@ -26,22 +29,22 @@ class Register extends Component {
         const repeatPassword = this.repeatPasswordInput.current.value.trim();
 
         // * validations
-        if(!email || email.length < 5) {
+        if (!email || email.length < 5) {
             alert('Email is required!');
             return;
         }
 
-        if(!username || username.length < 5) {
+        if (!username || username.length < 5) {
             alert('Username must be at least 5 symbols long!');
             return;
         }
 
-        if(!password || password.length < 6) {
+        if (!password || password.length < 6) {
             alert('Password must be at least 6 symbols long!');
             return;
         }
 
-        if(password !== repeatPassword) {
+        if (password !== repeatPassword) {
             alert('Passwords does not match!');
             return;
         }
@@ -52,22 +55,30 @@ class Register extends Component {
             password
         });
 
-        if(result.successfull) {
+        if (result.successfull) {
             this.setState({ successfullRegister: true });
         } else {
-            alert('Something went wrong');
+            this.setState({
+                successfullRegister: false,
+                errorMessages: [...result.errorMessages]
+            });
         }
     }
 
     render() {
-        if(this.state.successfullRegister) {
+        if (this.state.successfullRegister) {
             return <Redirect to='/Calendar' />
         }
+
+        const alerts = [];
+        this.state.errorMessages.map((message, index) =>
+            alerts.push(<Alert alert='danger' message={message} key={index} />));
 
         return (
             <div className={classes.RegisterContainer}>
                 <p className={classes.Slogan}>Register your reactive account</p>
                 <form>
+                    {alerts}
                     <div className="form-group">
                         <label>Email address</label>
                         <input type="email" className="form-control" placeholder="Enter your email" ref={this.emailInput} />
