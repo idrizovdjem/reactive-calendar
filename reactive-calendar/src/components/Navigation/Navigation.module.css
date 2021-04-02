@@ -25,6 +25,7 @@
 
 .NavigationButton:hover {
     cursor: pointer;
+    text-decoration: none;
     background-color: white;
     color: #406E8E;
 }

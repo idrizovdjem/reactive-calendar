@@ -1,27 +1,23 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import classes from './Navigation.module.css';
 
 const Navigation = (props) => {
     let buttons = null;
 
-    const changePage = (event) => {
-        const page = event.target.textContent;
-        props.redirect(page);
-    }
-
     if(props.isUserAuthenticated) {
         buttons = (
             <span>
                 <button className={classes.NavigationButton}>Logout</button>
-                <button onClick={changePage} className={classes.NavigationButton}>Overview</button>
-                <button onClick={changePage} className={classes.NavigationButton}>Calendar</button>
+                <Link to='/Overview' className={classes.NavigationButton}>Overview</Link>
+                <Link to='/Calendar' className={classes.NavigationButton}>Calendar</Link>
             </span>
         );
     } else {
         buttons = (
             <span>
-                <button onClick={changePage} className={classes.NavigationButton}>Register</button>
-                <button onClick={changePage} className={classes.NavigationButton}>Login</button>
+                <Link to='/Register' className={classes.NavigationButton}>Register</Link>
+                <Link to='/Login' className={classes.NavigationButton}>Login</Link>
             </span>
         );
     }

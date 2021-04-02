@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Navigation from './components/Navigation/Navigation';
 import Login from './components/Login/Login';
@@ -8,32 +9,23 @@ import TodoContainer from './components/TodoContainer/TodoContainer';
 
 class App extends Component {
   state = {
-    isUserAuthenticated: true,
-    currentPage: 'Todo'
+    isUserAuthenticated: true
   };
 
-  changePage = (page) => {
-    this.setState({ currentPage: page });
-  }
-
   render() {
-    let renderElement = null;
-    if(this.state.currentPage === 'Login') {
-      renderElement = <Login />
-    } else if(this.state.currentPage === 'Register') {
-      renderElement = <Register />
-    } else if(this.state.currentPage === 'Calendar') {
-      renderElement = <Calendar />
-    } else if(this.state.currentPage === 'Todo') {
-      renderElement = <TodoContainer />
-    }
-
     return (
       <div>
-        <Navigation 
-          isUserAuthenticated={this.state.isUserAuthenticated}
-          redirect={this.changePage} />
-          {renderElement}
+        <BrowserRouter>
+          <Navigation
+            isUserAuthenticated={this.state.isUserAuthenticated}
+            redirect={this.changePage} />
+          <Switch>
+            <Route path='/Calendar' component={Calendar} />
+            <Route path='/Login' component={Login} />
+            <Route path='/Register' component={Register} />
+            <Route path='/Todo' component={TodoContainer} />
+          </Switch>
+        </BrowserRouter>
       </div>
     );
   }
