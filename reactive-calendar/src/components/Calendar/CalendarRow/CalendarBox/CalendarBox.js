@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import classes from './CalendarBox.module.css';
 
 import CalendarTodo from './CalendarTodo/CalendarTodo'
@@ -12,19 +13,21 @@ class CalendarBox extends Component {
 
         return (
             <td className={boxClass}>
-                <span className={classes.FirstRow}>
-                    <div className={classes.LeftBox}>
-                        <div className={classes.ColorBox}>
+                <Link to='/Todo'>
+                    <span className={classes.FirstRow}>
+                        <div className={classes.LeftBox}>
+                            <div className={classes.ColorBox}>
+                            </div>
                         </div>
-                    </div>
-                    <div className={classes.RightBox}>
-                        <span className={numberClass}>{date.day}</span>
-                    </div>
-                </span>
-                <span className={classes.SecondRow}>
-                    <CalendarTodo text={'Implem...'}/>
-                    <CalendarTodo text={'Implem...'}/>
-                </span>
+                        <div className={classes.RightBox}>
+                            <span className={numberClass}>{date.day}</span>
+                        </div>
+                    </span>
+                    <span className={classes.SecondRow}>
+                        <CalendarTodo text={'Implem...'} />
+                        <CalendarTodo text={'Implem...'} />
+                    </span>
+                </Link>
             </td>
         );
     }

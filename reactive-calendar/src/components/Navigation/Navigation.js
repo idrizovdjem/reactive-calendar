@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import authService from '../../services/authService.js';
+
 import classes from './Navigation.module.css';
 
 const Navigation = (props) => {
     let buttons = null;
 
-    if(props.isUserAuthenticated) {
+    if(authService.isUserAuthenticated()) {
         buttons = (
             <span>
                 <button className={classes.NavigationButton}>Logout</button>
