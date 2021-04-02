@@ -1,5 +1,6 @@
-const { User } = require('../data/context.js');
+const { User, Session } = require('../data/context.js');
 const crypto = require('crypto');
+const { v4 } = require('uuid');
 
 async function register(email, username, password) {
     const response = {
@@ -9,31 +10,39 @@ async function register(email, username, password) {
     };
 
     // * simple input data validations
-    if(!email || email.length < 5) {
+    if (!email || email.length < 5) {
         addErrorMessage(response, 'Invalid email!');
     }
 
-    if(!username || username.length < 5) {
+    if (!username || username.length < 5) {
         addErrorMessage(response, 'Username must be at least 5 symbols!');
     }
 
-    if(!password || password.length < 6) {
+    if (!password || password.length < 6) {
         addErrorMessage(response, 'Password must be at least 6 symbols long!');
     }
 
     // * add more complex validations
-    if(await isEmailAvailable(email) === false) {
+    if (await isEmailAvailable(email) === false) {
         addErrorMessage(response, 'This username is already taken!');
     }
 
-    if(await isUsernameAvailabale(username) === false) {
+    if (await isUsernameAvailabale(username) === false) {
         addErrorMessage(response, 'This username is already taken!');
     }
 
-    if(response.successfull) {
+    if (response.successfull) {
         const hash = hashPassword(password);
         const user = await User.create({ email, username, password: hash });
-        response.data = user;
+
+        // create session token for the user
+        const uuidToken = v4();
+        const session = await Session.create({
+            userId: user.id,
+            token: uuidToken
+        });
+
+        response.data.authToken = session.token;
     }
 
     return response;
