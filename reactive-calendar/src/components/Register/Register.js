@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
-import axios from '../../axios.js';
+import { Redirect } from 'react-router-dom';
+import authService from '../../services/authService.js';
 import classes from './Register.module.css';
 
 class Register extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            successfullRegister: false
+        };
 
         this.emailInput = React.createRef(null);
         this.usernameInput = React.createRef(null);
@@ -41,23 +46,24 @@ class Register extends Component {
             return;
         }
 
-        const response = await axios.post('/users/register', {
+        const result = await authService.register({
             email,
             username,
             password
         });
 
-        const result = response.data.result;
-
         if(result.successfull) {
-            const authToken = result.data.authToken;
-            this.props.authenticate(authToken);
+            this.setState({ successfullRegister: true });
+        } else {
+            alert('Something went wrong');
         }
-
-        // TODO: check for errors
     }
 
     render() {
+        if(this.state.successfullRegister) {
+            return <Redirect to='/Calendar' />
+        }
+
         return (
             <div className={classes.RegisterContainer}>
                 <p className={classes.Slogan}>Register your reactive account</p>
