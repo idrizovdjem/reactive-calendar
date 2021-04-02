@@ -1,5 +1,5 @@
 function isUserAuthenticated() {
-    const authToken = sessionStorage.getItem('authToken');
+    const authToken = localStorage.getItem('authToken');
     return authToken !== null;
 }
 
