@@ -59,3 +59,9 @@
     font-size: 4vh;
     height: 5vh;
 }
+
+@media screen and (max-width: 600px) {
+    .TodoForm {
+        width: 95%;
+    }
+}

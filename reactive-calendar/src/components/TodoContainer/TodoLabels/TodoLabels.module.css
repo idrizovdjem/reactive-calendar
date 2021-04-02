@@ -6,3 +6,11 @@
     margin-top: 1vh;
     margin-left: 3vh;
 }
+
+@media screen and (max-width: 600px) {
+    .TodoLabels {
+        width: 95%;
+        margin-left: 0;
+        height: auto;
+    }
+}

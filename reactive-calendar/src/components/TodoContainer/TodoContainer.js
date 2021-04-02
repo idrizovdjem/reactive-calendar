@@ -8,31 +8,64 @@ import TodoForm from './TodoForm/TodoForm';
 import TodoLabels from './TodoLabels/TodoLabels';
 
 class TodoContainer extends Component {
-    // TODO: add todo label
+    state = {
+        showCreateForm: false,
+        todos: [
+            { 
+                title: 'Implement authentication',
+                label: {
+                    backgroundColor: 'violetblue',
+                    color: 'white'
+                },
+                isChecked: true
+            },
+            {
+                title: 'Implement backend service',
+                label: {
+                    backgroundColor: 'red',
+                    color: 'white'
+                },
+                isChecked: false
+            }
+        ]
+    };
+
+    toggleCreateFormVisibility = () => {
+        this.setState({ showCreateForm: !this.state.showCreateForm });
+    }
 
     render() {
+        let createForm = null;
+        if (this.state.showCreateForm) {
+            createForm = (
+                <div className={classes.Form}>
+                    <TodoForm />
+                    <TodoLabels />
+                </div>
+            );
+        }
+
+        let todos = [];
+        if(this.state.todos.length > 0) {
+            for(const todo of this.state.todos) {
+                const element = <Todo title={todo.title} label={todo.label} isChecked={todo.isChecked} />
+                todos.push(element);
+            }
+        }
+
         return (
             <div className={classes.TodoContainer}>
                 <span className={classes.CurrentDate}>Current date: 2021/03/31</span>
 
                 <div className={classes.TodoSection}>
                     <span className={classes.TodoSectionText}>Todo section:</span>
-                    <FontAwesomeIcon icon={faPlusCircle} className={classes.Add}/>
-                    <div className={classes.Form}>
-                        <TodoForm />
-                        <TodoLabels />
-                    </div>
+                    <FontAwesomeIcon onClick={this.toggleCreateFormVisibility} icon={faPlusCircle} className={classes.Add} />
 
-                    <Todo />
-                    <Todo />
-                    <Todo />
-                    <Todo />
-                    <Todo />
-                    <Todo />
-                    <Todo />
-                    <Todo />
-                    <Todo />
-                    <Todo />
+                    {createForm}
+
+                    <div className={classes.Todos}>
+                        {todos}
+                    </div>
                 </div>
             </div>
         );

@@ -8,9 +8,11 @@ class TodoLabels extends Component {
     render() {
         return (
             <div className={classes.TodoLabels}>
-                <Label />
-                <Label />
-                <Label />
+                <Label backgroundColor='red' color='white' text='Very important'/>
+                <Label backgroundColor='violetblue' color='white' text='Important'/>
+                <Label backgroundColor='blue' color='white' text='Work' />
+                <Label backgroundColor='yellow' color='black' text='Task'/>
+                <Label backgroundColor='green' color='white' text='Hobby'/>
             </div>
         );
     }

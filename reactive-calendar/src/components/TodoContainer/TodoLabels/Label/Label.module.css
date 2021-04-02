@@ -13,3 +13,13 @@
     width: 100%;
     padding-left: 1vw;
 }
+
+.LabelText:hover {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+    .Label {
+        width: 100%;
+    }
+}

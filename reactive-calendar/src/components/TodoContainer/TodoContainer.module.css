@@ -35,8 +35,12 @@
 
 .Form {
     width: 80vw;
-    height: 50vh;
+    float: left;
     margin-bottom: 2vh;
+}
+
+.Todos {
+    float: left;
 }
 
 @media screen and (max-width: 600px) {
