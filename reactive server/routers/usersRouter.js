@@ -4,14 +4,14 @@ const authService = require('../services/authService.js');
 
 router.post('/login', async(request, response) => {
     const { email, password } = request.body;
-    const result = await authService.login(email, password);
-    response.json({ result });
+    const loginResponse = await authService.login(email, password);
+    response.json({ response: loginResponse });
 });
 
 router.post('/register', async(request, response) => {
     const { email, username, password } = request.body;
-    const result = await authService.register(email, username, password);
-    response.json({ result });
+    const registerResponse = await authService.register(email, username, password);
+    response.json({ response: registerResponse });
 });
 
 module.exports = router;

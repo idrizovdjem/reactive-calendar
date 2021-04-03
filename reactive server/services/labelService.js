@@ -17,6 +17,10 @@ async function getByText(text) {
         }
     }
 
+    if(!response.successfull) {
+        return response;
+    }
+
     const labelResponse = await Label.findOne({
         attributes: ['id'],
         where: {
@@ -80,7 +84,58 @@ async function create(backgroundColor, color, text) {
     return response;
 }
 
+async function getById(id) {
+    const response = {
+        successfull: true,
+        errorMessages: [],
+        data: {}
+    };
+
+    if(!id) {
+        utilityService.addErrorMessage(response, 'Invalid id!');
+    } else {
+        const label = await Label.findOne({
+            attributes: ['backgroundColor', 'color'],
+            where: {
+                id: id
+            }
+        });
+
+        if(label === null) {
+            utilityService.addErrorMessage(response, 'Missing label!');
+        } else {
+            const { backgroundColor, color } = label.dataValues;
+            response.data = {
+                backgroundColor,
+                color
+            };
+        }
+
+        return response;
+    }
+}
+
+async function getAll() {
+    const response = {
+        successfull: true,
+        errorMessages: [],
+        data: {}
+    };
+
+    const labels = await Label.findAll();
+    response.data.labels = labels.map(label => {
+        return {
+            backgroundColor: label.backgroundColor,
+            color: label.color,
+            text: label.text
+        }
+    });
+    return response;
+}
+
 module.exports = {
     getByText,
+    getAll,
+    getById,
     create
 };

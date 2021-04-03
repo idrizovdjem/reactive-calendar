@@ -1,6 +1,6 @@
 const utilityService = require('./utilityService.js');
 const labelService = require('./labelService.js');
-const { Todo } = require('../data/context.js');
+const { Todo, Label } = require('../data/context.js');
 
 async function create(userId, title, description, date, labelText) {
     const response = {
@@ -30,14 +30,10 @@ async function create(userId, title, description, date, labelText) {
     if(!date) {
         utilityService.addErrorMessage(response, 'Todo date is required!');
     } else {
-        date = date.trim();
         // ? date format: `{year}{month}{day}`;
         // ? example '20210403' (03 Apr 2021)
-        if(date.length !== 8) {
-            utilityService.addErrorMessage(response, 'Invalid date!');
-        }
 
-        date = Number(date);
+        date = parseInt(date);
         if(Number.isNaN(date)) {
             utilityService.addErrorMessage(response, 'Invalid date format!');
         }
@@ -67,6 +63,58 @@ async function create(userId, title, description, date, labelText) {
     return response;
 }
 
+async function getForDate(userId, date) {
+    const response = {
+        successfull: true,
+        errorMessages: [],
+        data: {}
+    };
+
+    if(!date) {
+        utilityService.addErrorMessage(response, 'Invalid date!');
+    } else {
+        // ? date format: `{year}{month}{day}`;
+        // ? example '20210403' (03 Apr 2021)
+        date = parseInt(date);
+        if(Number.isNaN(date)) {
+            utilityService.addErrorMessage(response, 'Invalid date format!');
+        }
+    }
+
+    if(response.successfull) {
+        const todosArray = await Todo.findAll({
+            where: {
+                userId: userId,
+                date: date
+            }
+        });
+
+        const todos = [];
+        for(const todo of todosArray) {
+            const todoObject = {
+                'title': todo.title,
+                'description': todo.description
+            };
+
+            const todoLabelResponse = await labelService.getById(todo.labelId);
+            if(todoLabelResponse.successfull) {
+                todoObject.label = todoLabelResponse.data;
+                todos.push(todoObject);
+            } else {
+                todoLabelResponse.errorMessages.forEach(message => {
+                    utilityService.addErrorMessage(response, message);
+                });
+            }   
+        }
+
+        response.data.todos = todos;
+        return response;
+    }
+
+    return response;
+}
+
 module.exports = {
-    create
+    create,
+    getForDate
 };

@@ -80,13 +80,14 @@ async function login(email, password) {
 
         const userId = userResult.dataValues.id;
 
-        const authToken = await Session.findOne({
+        const session = await Session.findOne({
             attributes: ['token'],
             where: {
                 userId: userId
             }
         });
 
+        const authToken = session.dataValues.token;
         response.data.authToken = authToken;
     }
 
