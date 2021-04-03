@@ -64,7 +64,7 @@ function transformToArray(dateObject) {
 
         for(let i = dateObject.previous.from; i <= dateObject.previous.to; i++) {
             days.push({
-                date: `${previousYear}/${previousMonth}/${i}`,
+                date: `${previousYear}${previousMonth}${i}`,
                 currentMonth: false,
                 isActive: false,
                 day: i
@@ -85,7 +85,7 @@ function transformToArray(dateObject) {
         }
 
         const currentDateObject = {
-            date: `${year}/${currentMonth}/${currentDate}`,
+            date: `${year}${currentMonth}${currentDate}`,
             currentMonth: true,
             isActive: false,
             day: i
@@ -116,7 +116,7 @@ function transformToArray(dateObject) {
         for(let i = 1; i <= dateObject.next.to; i++) {
             const currentDate = `0${i}`;
             const currentDateObject = {
-                date: `${nextYear}/${nextMonth}/${currentDate}`,
+                date: `${nextYear}${nextMonth}${currentDate}`,
                 currentMonth: false,
                 isActive: false,
                 day: i

@@ -10,7 +10,7 @@ import TodoContainer from './components/TodoContainer/TodoContainer';
 
 class App extends Component {
   state = {
-    redirect: '/Login'
+    redirect: '/Login',
   };
 
   redirect = (page) => {
@@ -20,20 +20,20 @@ class App extends Component {
   render() {
     const redirect = this.state.redirect ? <Redirect to={this.state.redirect} /> : null;
 
-    const requireAuthentication = (Component) => {
+    const requireAuthentication = (Component, props) => {
       if (!authService.isUserAuthenticated()) {
         return <Redirect to='/Login'/>
       }
 
-      return <Component redirect={this.redirect}/>
+      return <Component redirect={this.redirect} {...props} />
     }
 
-    const requireAnonymous = (Component) => {
+    const requireAnonymous = (Component, props) => {
       if (authService.isUserAuthenticated()) {
         return <Redirect to='/Calendar' />
       }
 
-      return <Component redirect={this.redirect}/>
+      return <Component redirect={this.redirect} {...props} />
     }
   
     return (
@@ -42,10 +42,10 @@ class App extends Component {
           {redirect}
           <Navigation redirect={this.redirect} />
           <Switch>
-            <Route path='/Login' render={() => requireAnonymous(Login)} />
-            <Route path='/Register' render={() => requireAnonymous(Register)} />
-            <Route path='/Calendar' render={() => requireAuthentication(Calendar)} />
-            <Route path='/Todo' render={() => requireAuthentication(TodoContainer)} />
+            <Route path='/Login' render={(props) => requireAnonymous(Login, props)} />
+            <Route path='/Register' render={(props) => requireAnonymous(Register, props)} />
+            <Route path='/Calendar' render={(props) => requireAuthentication(Calendar, props)} />
+            <Route path='/Todo/:date' render={(props) => requireAuthentication(TodoContainer, props)} />
           </Switch>
         </BrowserRouter>
       </div>

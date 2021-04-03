@@ -2,7 +2,7 @@ import axios from '../axios.js';
 
 async function register(data) {
     const response = await axios.post('/users/register', data);
-    const result = response.data.result;
+    const result = response.data.response;
     if(result.successfull) {
         const authToken = result.data.authToken;
         persistUserData(authToken);
@@ -13,7 +13,7 @@ async function register(data) {
 
 async function login(data) {
     const response = await axios.post('/users/login', data);
-    const result = response.data.result;
+    const result = response.data.response;
     if(result.successfull) {
         const authToken = result.data.authToken;
         persistUserData(authToken);

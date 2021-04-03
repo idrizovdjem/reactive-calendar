@@ -1,42 +1,38 @@
 import React, { Component } from 'react';
+import labelsService from '../../../services/labelService.js';
 import classes from './TodoLabels.module.css';
 
 import Label from './Label/Label';
+import Alert from '../../Alert/Alert';
+import Spinner from '../../Spinner/Spinner';
 
 class TodoLabels extends Component {
     state = {
-        labels: [
-            {
-                backgroundColor: 'red',
-                color: 'white',
-                text: 'Very Important',
-                isSelected: false
-            },
-            {
-                backgroundColor: 'violetblue',
-                color: 'white',
-                text: 'Important',
-                isSelected: false
-            },
-            {
-                backgroundColor: 'blue',
-                color: 'white',
-                text: 'Work',
-                isSelected: false
-            },
-            {
-                backgroundColor: 'yellow',
-                color: 'black',
-                text: 'Tasks',
-                isSelected: false
-            },
-            {
-                backgroundColor: 'green',
-                color: 'white',
-                text: 'Hobby',
-                isSelected: false
-            }
-        ]
+        isLoading: true,
+        errorMessages: [],
+        labels: []
+    }
+
+    async componentDidMount() {
+        this.setState({ isLoading: true });
+        const labelsResponse = await labelsService.getAll();
+
+        if(!labelsResponse.successfull) {
+            this.setState({
+                isLoading: false,
+                errorMessages: [...labelsResponse.errorMessages]
+            });
+        } else {
+            const labels = labelsResponse.data.labels.map(label => {
+                label.isSelected = false;
+                return label;
+            })
+
+            this.setState({
+                isLoading: false,
+                labels: [...labels]
+            });
+        }
     }
 
     changeLabelHandler = (label) => {
@@ -54,12 +50,20 @@ class TodoLabels extends Component {
     }
 
     render() {
+        const spinner = this.state.isLoading ? <Spinner /> : null;
+        const alerts = [];
+        this.state.errorMessages.forEach(message => {
+            alerts.push(<Alert alert='danger' message={message} />);
+        });
+
         const labels = [];
         this.state.labels.map((label, index) => 
             labels.push(<Label change={this.changeLabelHandler} backgroundColor={label.backgroundColor} color={label.color} text={label.text} key={index} isSelected={label.isSelected} />));
 
         return (
             <div className={classes.TodoLabels}>
+                {alerts}
+                {spinner}
                 {labels}
             </div>
         );

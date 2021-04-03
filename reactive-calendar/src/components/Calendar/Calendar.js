@@ -35,7 +35,7 @@ class Calendar extends Component {
                     currentRowDays.push(this.state.days[next++]);
                 }
 
-                calendarRows.push(<CalendarRow key={i} days={currentRowDays} />);
+                calendarRows.push(<CalendarRow redirect={this.props.redirect} key={i} days={currentRowDays} />);
             }
         }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classes from './TodoContainer.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import axios from '../../axios.js';
 
 import Todo from './Todo/Todo';
 import TodoForm from './TodoForm/TodoForm';
@@ -34,7 +35,7 @@ class TodoContainer extends Component {
             label: null
         }
     };
-
+    
     createTodoHandler = (title, description) => {
         if(!this.state.currentTodo.label) {
             alert('Choose label');
@@ -46,6 +47,7 @@ class TodoContainer extends Component {
         currentTodo.description = description;
 
         const todos = this.state.todos;
+        // TODO: Implement todo create
         this.setState({ 
             todos: [ ...todos, currentTodo ],
             currentTodo: {

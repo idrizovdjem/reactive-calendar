@@ -9,7 +9,7 @@ class CalendarRow extends Component {
         if(this.props.days.length > 0) {
             for(let i = 0; i < this.props.days.length; i++) {
                 const date = this.props.days[i];
-                boxArray.push(<CalendarBox key={i} date={date} />);
+                boxArray.push(<CalendarBox redirect={this.props.redirect} key={i} dateObject={date} />);
             }
         }
 
