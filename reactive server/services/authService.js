@@ -1,6 +1,6 @@
 const { User, Session } = require('../data/context.js');
-const crypto = require('crypto');
 const { v4 } = require('uuid');
+const utilityService = require('./utilityService.js');
 
 async function register(email, username, password) {
     const response = {
@@ -11,27 +11,27 @@ async function register(email, username, password) {
 
     // * simple input data validations
     if (!email || email.length < 5) {
-        addErrorMessage(response, 'Invalid email!');
+        utilityService.addErrorMessage(response, 'Invalid email!');
     } else {
         if (await isEmailAvailable(email) === false) {
-            addErrorMessage(response, 'This username is already taken!');
+            utilityService.addErrorMessage(response, 'This username is already taken!');
         }
     }
 
     if (!username || username.length < 5) {
-        addErrorMessage(response, 'Username must be at least 5 symbols!');
+        utilityService.addErrorMessage(response, 'Username must be at least 5 symbols!');
     } else {
         if (await isUsernameAvailabale(username) === false) {
-            addErrorMessage(response, 'This username is already taken!');
+            utilityService.addErrorMessage(response, 'This username is already taken!');
         }
     }
 
     if (!password || password.length < 6) {
-        addErrorMessage(response, 'Password must be at least 6 symbols long!');
+        utilityService.addErrorMessage(response, 'Password must be at least 6 symbols long!');
     }
 
     if (response.successfull) {
-        const hash = hashPassword(password);
+        const hash = utilityService.hashPassword(password);
         const user = await User.create({ email, username, password: hash });
 
         // create session token for the user
@@ -56,15 +56,15 @@ async function login(email, password) {
 
     // * simple input data validations
     if (!email || email.length < 5) {
-        addErrorMessage(response, 'Invalid email!');
+        utilityService.addErrorMessage(response, 'Invalid email!');
     }
 
     if (!password || password.length < 6) {
-        addErrorMessage(response, 'Password must be at least 6 symbols long!');
+        utilityService.addErrorMessage(response, 'Password must be at least 6 symbols long!');
     }
 
     if (response.successfull) {
-        const hash = hashPassword(password);
+        const hash = utilityService.hashPassword(password);
         const userResult = await User.findOne({
             attributes: ['id'],
             where: {
@@ -74,7 +74,7 @@ async function login(email, password) {
         });
 
         if (userResult === null) {
-            addErrorMessage(response, 'Invalid login information!');
+            utilityService.addErrorMessage(response, 'Invalid login information!');
             return response;
         }
 
@@ -91,11 +91,6 @@ async function login(email, password) {
     }
 
     return response;
-}
-
-function addErrorMessage(response, message) {
-    response.successfull = false;
-    response.errorMessages.push(message);
 }
 
 async function isEmailAvailable(email) {
@@ -118,13 +113,36 @@ async function isUsernameAvailabale(username) {
     return user === null;
 }
 
-function hashPassword(password) {
-    const hash = crypto.createHash('sha512').update(password, 'utf-8');
-    const result = hash.digest('hex');
-    return result;
+async function authenticateUser(authToken) {
+    const response = {
+        successfull: true,
+        errorMessages: [],
+        data: {}
+    }
+
+    if(!authToken) {
+        utilityService.addErrorMessage(response, 'Invalid auth token!');
+        return response;
+    }
+
+    const sessionResult = await Session.findOne({
+        attributes: ['userId'],
+        where: {
+            token: authToken
+        }
+    });
+
+    if(sessionResult === null) {
+        utilityService.addErrorMessage(response, 'Invalid auth token!');
+        return response;
+    }
+
+    response.data.userId = sessionResult.dataValues.userId;
+    return response;
 }
 
 module.exports = {
+    authenticateUser,
     register,
     login
 };

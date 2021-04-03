@@ -10,7 +10,7 @@ function setup(sequelize, DataTypes) {
             allowNull: false
         },
         date: {
-            type: DataTypes.DATE,
+            type: DataTypes.INTEGER,
             allowNull: null
         },
         title: {
