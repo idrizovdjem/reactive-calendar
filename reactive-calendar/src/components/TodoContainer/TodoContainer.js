@@ -1,34 +1,21 @@
 import React, { Component } from 'react';
+import todoService from '../../services/todoService.js';
 import classes from './TodoContainer.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import axios from '../../axios.js';
 
+import Alert from '../Alert/Alert';
+import Spinner from '../Spinner/Spinner';
 import Todo from './Todo/Todo';
 import TodoForm from './TodoForm/TodoForm';
 import TodoLabels from './TodoLabels/TodoLabels';
 
 class TodoContainer extends Component {
     state = {
+        isLoading: false,
+        errorMessages: [],
         showCreateForm: false,
-        todos: [
-            { 
-                title: 'Implement authentication',
-                label: {
-                    backgroundColor: 'violetblue',
-                    color: 'white'
-                },
-                isChecked: true
-            },
-            {
-                title: 'Implement backend service',
-                label: {
-                    backgroundColor: 'red',
-                    color: 'white'
-                },
-                isChecked: false
-            }
-        ],
+        todos: [],
         currentTodo: {
             title: null,
             description: null,
@@ -36,6 +23,25 @@ class TodoContainer extends Component {
         }
     };
     
+    async componentDidMount() {
+        const date = this.props.match.params.date;
+
+        this.setState({ isLoading: true });
+        const todosResponse = await todoService.getDailyTodos(date);
+
+        if(!todosResponse.successfull) {
+            this.setState({
+                errorMessages: [...todosResponse.errorMessages],
+                isLoading: false
+            });
+        } else {
+            this.setState({
+                todos: [...todosResponse.data.todos],
+                isLoading: false
+            });
+        }
+    }
+
     createTodoHandler = (title, description) => {
         if(!this.state.currentTodo.label) {
             alert('Choose label');
@@ -88,6 +94,12 @@ class TodoContainer extends Component {
             }
         }
 
+        const spinner = this.state.isLoading ? <Spinner /> : null;
+        const alerts = [];
+        this.state.errorMessages.forEach((message, index) => {
+            alerts.push(<Alert alert='danger' message={message} key={index} />);
+        });
+
         return (
             <div className={classes.TodoContainer}>
                 <span className={classes.CurrentDate}>Current date: 2021/03/31</span>
@@ -99,6 +111,8 @@ class TodoContainer extends Component {
                     {createForm}
 
                     <div className={classes.Todos}>
+                        {alerts}
+                        {spinner}
                         {todos}
                     </div>
                 </div>
