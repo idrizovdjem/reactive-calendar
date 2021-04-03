@@ -5,7 +5,7 @@ async function register(data) {
     const result = response.data.result;
     if(result.successfull) {
         const authToken = result.data.authToken;
-        localStorage.setItem('authToken', authToken);
+        persistUserData(authToken);
     }
 
     return result;
@@ -16,10 +16,18 @@ async function login(data) {
     const result = response.data.result;
     if(result.successfull) {
         const authToken = result.data.authToken;
-        localStorage.setItem('authToken', authToken);
+        persistUserData(authToken);
     }
 
     return result;
+}
+
+function persistUserData(authToken) {
+    localStorage.setItem('authToken', authToken);
+}
+
+function logout() {
+    localStorage.removeItem('authToken');
 }
 
 function isUserAuthenticated() {
@@ -28,9 +36,10 @@ function isUserAuthenticated() {
 }
 
 const authService = {
+    isUserAuthenticated,
     register,
     login,
-    isUserAuthenticated
+    logout
 };
 
 export default authService;

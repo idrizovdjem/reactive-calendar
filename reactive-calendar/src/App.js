@@ -9,13 +9,23 @@ import Calendar from './components/Calendar/Calendar';
 import TodoContainer from './components/TodoContainer/TodoContainer';
 
 class App extends Component {
+  state = {
+    redirect: '/Login'
+  };
+
+  redirect = (page) => {
+    this.setState({ redirect: page });
+  }
+
   render() {
+    const redirect = this.state.redirect ? <Redirect to={this.state.redirect} /> : null;
+
     const requireAuthentication = (Component) => {
       if (!authService.isUserAuthenticated()) {
-        return <Redirect to='/Login' />
+        return <Redirect to='/Login'/>
       }
 
-      return <Component />
+      return <Component redirect={this.redirect}/>
     }
 
     const requireAnonymous = (Component) => {
@@ -23,13 +33,14 @@ class App extends Component {
         return <Redirect to='/Calendar' />
       }
 
-      return <Component />
+      return <Component redirect={this.redirect}/>
     }
   
     return (
       <div>
         <BrowserRouter>
-          <Navigation redirect={this.changePage} />
+          {redirect}
+          <Navigation redirect={this.redirect} />
           <Switch>
             <Route path='/Login' render={() => requireAnonymous(Login)} />
             <Route path='/Register' render={() => requireAnonymous(Register)} />

@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import authService from '../../services/authService.js';
 import classes from './Register.module.css';
 
 import Alert from '../Alert/Alert';
+import Spinner from '../Spinner/Spinner';
 
 class Register extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            successfullRegister: false,
+            isLoading: false,
             errorMessages: []
         };
 
@@ -49,26 +49,27 @@ class Register extends Component {
             return;
         }
 
+        this.setState({ isLoading: true });
+
         const result = await authService.register({
             email,
             username,
             password
         });
 
-        if (result.successfull) {
-            this.setState({ successfullRegister: true });
+        if(result.successfull) {
+            this.setState({ isLoading: false });
+            this.props.redirect('/Calendar');
         } else {
             this.setState({
-                successfullRegister: false,
+                isLoading: false,
                 errorMessages: [...result.errorMessages]
             });
         }
     }
 
     render() {
-        if (this.state.successfullRegister) {
-            return <Redirect to='/Calendar' />
-        }
+        const spinner = this.state.isLoading ? <Spinner /> : null;
 
         const alerts = [];
         this.state.errorMessages.map((message, index) =>
@@ -76,6 +77,7 @@ class Register extends Component {
 
         return (
             <div className={classes.RegisterContainer}>
+                {spinner}
                 <p className={classes.Slogan}>Register your reactive account</p>
                 <form>
                     {alerts}

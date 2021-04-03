@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import authService from '../../services/authService.js';
-import { Redirect } from 'react-router-dom';
 import classes from './Login.module.css';
 
 import Alert from '../Alert/Alert';
+import Spinner from '../Spinner/Spinner';
 
 class Login extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            successfullLogin: false,
+            isLoading: false,
             errorMessages: []
         };
 
@@ -24,6 +24,7 @@ class Login extends Component {
         const email = this.emailInput.current.value.trim();
         const password = this.passwordInput.current.value.trim();
 
+        // * validations
         if(!email || email.length < 5) {
             alert('Email is required!');
             return;
@@ -34,22 +35,23 @@ class Login extends Component {
             return;
         }
 
+        this.setState({ isLoading: true });
+
         const result = await authService.login({ email, password });
 
         if (result.successfull) {
-            this.setState({ successfullLogin: true });
+            this.setState({ isLoading: false });
+            this.props.redirect('/Calendar');
         } else {
             this.setState({
-                successfullLogin: false,
-                errorMessages: [...result.errorMessages]
+                errorMessages: [...result.errorMessages],
+                isLoading: false
             });
         }
     }
 
     render() {
-        if(this.state.successfullLogin) {
-            return <Redirect to='/Calendar' />
-        }
+        const spinner = this.state.isLoading ? <Spinner /> : null;
 
         const alerts = [];
         this.state.errorMessages.map((message, index) =>
@@ -57,6 +59,7 @@ class Login extends Component {
 
         return (
             <div className={classes.LoginContainer}>
+                {spinner}
                 <p className={classes.Slogan}>Log in to your reactive account</p>
                 <form>
                     {alerts}
