@@ -87,11 +87,14 @@ class TodoContainer extends Component {
         }
 
         let todos = [];
-        if(this.state.todos.length > 0) {
-            for(const todo of this.state.todos) {
-                const element = <Todo title={todo.title} label={todo.label} isChecked={todo.isChecked} key={todo.title} />
-                todos.push(element);
-            }
+        this.state.todos.forEach((todo, index) => {
+            const element = <Todo title={todo.title} label={todo.label} isChecked={todo.isChecked} key={index} />
+            todos.push(element);
+        });
+
+        let noTodosElement = null;
+        if(this.state.todos.length === 0) {
+            noTodosElement = <h3 className={classes.NoTodos}>No created todos! Create one :)</h3>
         }
 
         const spinner = this.state.isLoading ? <Spinner /> : null;
@@ -115,6 +118,8 @@ class TodoContainer extends Component {
                         {spinner}
                         {todos}
                     </div>
+
+                    {noTodosElement}
                 </div>
             </div>
         );

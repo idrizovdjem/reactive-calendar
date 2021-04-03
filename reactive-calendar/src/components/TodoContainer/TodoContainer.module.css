@@ -39,6 +39,10 @@
     margin-bottom: 2vh;
 }
 
+.NoTodos {
+    text-align: center;
+}
+
 .Todos {
     float: left;
 }
