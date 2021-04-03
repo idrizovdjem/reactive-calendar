@@ -12,23 +12,22 @@ async function register(email, username, password) {
     // * simple input data validations
     if (!email || email.length < 5) {
         addErrorMessage(response, 'Invalid email!');
+    } else {
+        if (await isEmailAvailable(email) === false) {
+            addErrorMessage(response, 'This username is already taken!');
+        }
     }
 
     if (!username || username.length < 5) {
         addErrorMessage(response, 'Username must be at least 5 symbols!');
+    } else {
+        if (await isUsernameAvailabale(username) === false) {
+            addErrorMessage(response, 'This username is already taken!');
+        }
     }
 
     if (!password || password.length < 6) {
         addErrorMessage(response, 'Password must be at least 6 symbols long!');
-    }
-
-    // * add more complex validations
-    if (await isEmailAvailable(email) === false) {
-        addErrorMessage(response, 'This username is already taken!');
-    }
-
-    if (await isUsernameAvailabale(username) === false) {
-        addErrorMessage(response, 'This username is already taken!');
     }
 
     if (response.successfull) {
@@ -64,7 +63,7 @@ async function login(email, password) {
         addErrorMessage(response, 'Password must be at least 6 symbols long!');
     }
 
-    if(response.successfull) {
+    if (response.successfull) {
         const hash = hashPassword(password);
         const userResult = await User.findOne({
             attributes: ['id'],
@@ -74,7 +73,7 @@ async function login(email, password) {
             }
         });
 
-        if(userResult === null) {
+        if (userResult === null) {
             addErrorMessage(response, 'Invalid login information!');
             return response;
         }
