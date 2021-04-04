@@ -1,6 +1,7 @@
 const utilityService = require('./utilityService.js');
 const labelService = require('./labelService.js');
 const { Todo, Label } = require('../data/context.js');
+const { Op } = require('sequelize');
 
 async function create(userId, title, description, date, labelText) {
     const response = {
@@ -114,7 +115,69 @@ async function getForDate(userId, date) {
     return response;
 }
 
+async function getForRange(userId, startDate, endDate) {
+    const response = {
+        successfull: true,
+        errorMessages: [],
+        data: {}
+    };
+
+    if(!startDate) {
+        utilityService.addErrorMessage(response, 'Missing startDate');
+    } else {
+        startDate = parseInt(startDate);
+        if(Number.isNaN(startDate)) {
+            utilityService.addErrorMessage(response, 'Invalid startDate format!');
+        }
+    }
+
+    if(!endDate) {
+        utilityService.addErrorMessage(response, 'Missing endDate');
+    } else {
+        endDate = parseInt(endDate);
+        if(Number.isNaN(endDate)) {
+            utilityService.addErrorMessage(response, 'Invalid endDate format!');
+        }
+    }
+
+    if(response.successfull) {
+        const todosArray = await Todo.findAll({
+            attributes: ['date', 'title', 'labelId'],
+            where: {
+                userId: userId,
+                date: {
+                    [Op.between]: [startDate, endDate]
+                }
+            }
+        });
+
+        const todos = [];
+        for(const todo of todosArray) {
+            const todoObject = {
+                'title': todo.title,
+                'date': todo.date
+            };
+
+            const todoLabelResponse = await labelService.getById(todo.labelId);
+            if(todoLabelResponse.successfull) {
+                todoObject.label = todoLabelResponse.data;
+                todos.push(todoObject);
+            } else {
+                todoLabelResponse.errorMessages.forEach(message => {
+                    utilityService.addErrorMessage(response, message);
+                });
+            }   
+        }
+
+        response.data.todos = todos;
+        return response;
+    }
+
+    return response;
+}
+
 module.exports = {
     create,
-    getForDate
+    getForDate,
+    getForRange
 };

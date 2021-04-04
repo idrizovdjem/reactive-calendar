@@ -28,4 +28,16 @@ router.post('/daily', async (request, response) => {
     }
 });
 
+router.post('/getForDateRange', async (request, response) => {
+    const { authToken, startDate, endDate } = request.body;
+    const userIdResponse = await authService.authenticateUser(authToken);
+    if (!userIdResponse.successfull) {
+        response.json({ response: userIdResponse });
+    } else {
+        const userId = userIdResponse.data.userId;
+        const todosResponse = await todoService.getForRange(userId, startDate, endDate);
+        response .json({ response: todosResponse });
+    }
+});
+
 module.exports = router;

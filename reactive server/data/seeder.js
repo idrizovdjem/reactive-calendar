@@ -7,7 +7,7 @@ async function seedLabels(Label) {
             text: 'Very Important',
         },
         {
-            backgroundColor: 'violetblue',
+            backgroundColor: 'blueviolet',
             color: 'white',
             text: 'Important',
         },
