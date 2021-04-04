@@ -1,35 +1,71 @@
 import React, { Component } from 'react';
 import classes from './Calendar.module.css';
 import calendarService from '../../services/calendarService.js';
+import todoService from '../../services/todoService.js';
 
 import CalendarRow from './CalendarRow/CalendarRow';
+import Spinner from '../Spinner/Spinner';
+import Alert from '../Alert/Alert';
 
 class Calendar extends Component {
     state = {
+        isLoading: false,
+        errorMessages: [],
         days: [],
         date: {}
     };
 
-    componentDidMount() {
-        this.updateDate();
+    async componentDidMount() {
+        await this.updateDate();
     }
 
-    updateDate = () => {
+    updateDate = async () => {
+        this.setState({ isLoading: true });
+
         const currentDate = calendarService.getCurrentDate();
         const { year, month } = currentDate;
         const currentDays = calendarService.getCalendarDays(year, month);
 
-        const firstDate = currentDays[0].date;
-        const lastDate = currentDays[currentDays.length - 1].date;
+        const startDate = currentDays[0].date;
+        const endDate = currentDays[currentDays.length - 1].date;
 
+        const todosResponse = await todoService.getTodosForDates(startDate, endDate);
+        if(!todosResponse.successfull) {
+            this.setState({
+                isLoading: false,
+                errorMessages: [...todosResponse.errorMessages]
+            });
+            return;
+        }
+
+        const dateTodos = todosResponse.data.todos;
+        dateTodos.forEach(todo => {
+            const day = currentDays.find(day => day.date === todo.date);
+            if(day.todos.length < 2) {
+                day.todos.push(todo);
+            }
+        }); 
 
         this.setState({
+            isLoading: false,
             days: [...currentDays],
             date: currentDate
         });
     }
 
     render() {
+        if(this.state.errorMessages.length > 0) {
+            const alerts = this.state.errorMessages.map((message, index) => {
+                return <Alert alert='danger' message={message} key={index} />
+            });
+
+            return alerts;
+        }
+
+        if(this.state.isLoading) {
+            return <Spinner />
+        }
+
         const calendarRows = [];
         if (this.state.days.length !== 0) {
             let next = 0;

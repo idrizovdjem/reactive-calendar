@@ -10,6 +10,13 @@ class CalendarBox extends Component {
     }
 
     render() {
+        const todos = [];
+        if(this.props.dateObject.todos.length > 0) {
+            this.props.dateObject.todos.forEach((todo, index) => {
+                todos.push(<CalendarTodo title={todo.title} label={todo.label} key={index} />)
+            });
+        }
+
         const date = this.props.dateObject;
         let boxClass = date.currentMonth ? classes.Current : classes.Box;
         let numberClass = date.isActive ? classes.Active : classes.Number;
@@ -26,8 +33,7 @@ class CalendarBox extends Component {
                     </div>
                 </span>
                 <span className={classes.SecondRow}>
-                    <CalendarTodo text={'Implem...'} />
-                    <CalendarTodo text={'Implem...'} />
+                    {todos}
                 </span>
             </td>
         );

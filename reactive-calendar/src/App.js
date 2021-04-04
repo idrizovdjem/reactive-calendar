@@ -11,19 +11,25 @@ import TodoContainer from './components/TodoContainer/TodoContainer';
 
 class App extends Component {
   state = {
-    redirect: '/Login',
+    redirect: null,
+    currentPage: null
   };
 
+  componentDidMount() {
+    const lastPage = sessionStorage.getItem('page');
+    this.setState({ redirect: lastPage });
+  }
+
   redirect = (page) => {
+    sessionStorage.setItem('page', page);
     history.push(page);
+    this.setState({ currentPage: page });
   }
 
   render() {
-    const redirect = this.state.redirect ? <Redirect push to={this.state.redirect} /> : null;
-
     const requireAuthentication = (Component, props) => {
       if (!authService.isUserAuthenticated()) {
-        return <Redirect push to='/Login'/>
+        return <Redirect push to='/Login' />
       }
 
       return <Component redirect={this.redirect} {...props} />
@@ -39,9 +45,8 @@ class App extends Component {
 
     return (
       <div>
+        <Navigation redirect={this.redirect} />
         <Router history={history}>
-          {redirect}
-          <Navigation redirect={this.redirect} />
           <Switch>
             <Route path='/Login' render={(props) => requireAnonymous(Login, props)} />
             <Route path='/Register' render={(props) => requireAnonymous(Register, props)} />

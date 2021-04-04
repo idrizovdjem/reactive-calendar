@@ -69,7 +69,8 @@ function transformToArray(dateObject) {
                 date: parseInt(`${previousYear}${previousMonth}${i}`),
                 currentMonth: false,
                 isActive: false,
-                day: i
+                day: i,
+                todos: []
             });
         }
     }
@@ -90,7 +91,8 @@ function transformToArray(dateObject) {
             date: parseInt(`${year}${currentMonth}${currentDate}`),
             currentMonth: true,
             isActive: false,
-            day: i
+            day: i,
+            todos: []
         };
 
         if(i === dateObject.current.active) {
@@ -121,7 +123,8 @@ function transformToArray(dateObject) {
                 date: parseInt(`${nextYear}${nextMonth}${currentDate}`),
                 currentMonth: false,
                 isActive: false,
-                day: i
+                day: i,
+                todos: []
             };
 
             days.push(currentDateObject);

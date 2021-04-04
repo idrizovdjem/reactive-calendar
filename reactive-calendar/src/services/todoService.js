@@ -6,12 +6,26 @@ async function getDailyTodos(date) {
         authToken,
         date
     });
+    
+    const todosResponse = response.data.response;
+    return todosResponse;
+}
+
+async function getTodosForDates(startDate, endDate) {
+    const authToken = localStorage.getItem('authToken');
+    const response = await axios.post('/todo/getForDateRange', {
+        authToken,
+        startDate,
+        endDate
+    });
+
     const todosResponse = response.data.response;
     return todosResponse;
 }
 
 const todoService = {
-    getDailyTodos
+    getDailyTodos,
+    getTodosForDates
 };
 
 export default todoService;

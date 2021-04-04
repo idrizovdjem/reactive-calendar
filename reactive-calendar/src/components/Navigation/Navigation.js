@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
 import authService from '../../services/authService.js';
 
 import classes from './Navigation.module.css';
 
 class Navigation extends Component {
-    state = {
-        successfullLogout: false
-    };
+    redirect = (page) => {
+        this.props.redirect(page);
+    }
 
     logout = () => {
         authService.logout();
@@ -21,21 +20,17 @@ class Navigation extends Component {
             buttons = (
                 <span>
                     <button onClick={this.logout} className={classes.NavigationButton}>Logout</button>
-                    <Link to='/Overview' className={classes.NavigationButton}>Overview</Link>
-                    <Link to='/Calendar' className={classes.NavigationButton}>Calendar</Link>
+                    <button onClick={() => this.redirect('/Overview')} className={classes.NavigationButton}>Overview</button>
+                    <button onClick={() => this.redirect('/Calendar')} className={classes.NavigationButton}>Calendar</button>
                 </span>
             );
         } else {
             buttons = (
                 <span>
-                    <Link to='/Register' className={classes.NavigationButton}>Register</Link>
-                    <Link to='/Login' className={classes.NavigationButton}>Login</Link>
+                    <button onClick={() => this.redirect('/Register')} className={classes.NavigationButton}>Register</button>
+                    <button onClick={() => this.redirect('/Login')} className={classes.NavigationButton}>Login</button>
                 </span>
             );
-        }
-
-        if(this.state.successfullLogout) {
-            return <Redirect to='/Login' />
         }
 
         return (
