@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import authService from './services/authService.js';
+import history from './history.js';
 
 import Navigation from './components/Navigation/Navigation';
 import Login from './components/Login/Login';
@@ -14,15 +15,15 @@ class App extends Component {
   };
 
   redirect = (page) => {
-    this.setState({ redirect: page });
+    history.push(page);
   }
 
   render() {
-    const redirect = this.state.redirect ? <Redirect to={this.state.redirect} /> : null;
+    const redirect = this.state.redirect ? <Redirect push to={this.state.redirect} /> : null;
 
     const requireAuthentication = (Component, props) => {
       if (!authService.isUserAuthenticated()) {
-        return <Redirect to='/Login'/>
+        return <Redirect push to='/Login'/>
       }
 
       return <Component redirect={this.redirect} {...props} />
@@ -30,15 +31,15 @@ class App extends Component {
 
     const requireAnonymous = (Component, props) => {
       if (authService.isUserAuthenticated()) {
-        return <Redirect to='/Calendar' />
+        return <Redirect push to='/Calendar' />
       }
 
       return <Component redirect={this.redirect} {...props} />
     }
-  
+
     return (
       <div>
-        <BrowserRouter>
+        <Router history={history}>
           {redirect}
           <Navigation redirect={this.redirect} />
           <Switch>
@@ -47,7 +48,7 @@ class App extends Component {
             <Route path='/Calendar' render={(props) => requireAuthentication(Calendar, props)} />
             <Route path='/Todo/:date' render={(props) => requireAuthentication(TodoContainer, props)} />
           </Switch>
-        </BrowserRouter>
+        </Router>
       </div>
     );
   }
