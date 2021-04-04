@@ -19,6 +19,10 @@ class Calendar extends Component {
         const { year, month } = currentDate;
         const currentDays = calendarService.getCalendarDays(year, month);
 
+        const firstDate = currentDays[0].date;
+        const lastDate = currentDays[currentDays.length - 1].date;
+
+
         this.setState({
             days: [...currentDays],
             date: currentDate

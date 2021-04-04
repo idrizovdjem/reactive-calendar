@@ -45,7 +45,9 @@ function getCalendarDays(year, month) {
 function transformToArray(dateObject) {
     const days = [];
 
-    const { year, month } = dateObject;
+    let { year, month } = dateObject;
+    year = Number(year);
+    month = Number(month);
 
     // * generate objects if there are previous month days
     if(dateObject.previous) {
@@ -64,7 +66,7 @@ function transformToArray(dateObject) {
 
         for(let i = dateObject.previous.from; i <= dateObject.previous.to; i++) {
             days.push({
-                date: `${previousYear}${previousMonth}${i}`,
+                date: parseInt(`${previousYear}${previousMonth}${i}`),
                 currentMonth: false,
                 isActive: false,
                 day: i
@@ -85,7 +87,7 @@ function transformToArray(dateObject) {
         }
 
         const currentDateObject = {
-            date: `${year}${currentMonth}${currentDate}`,
+            date: parseInt(`${year}${currentMonth}${currentDate}`),
             currentMonth: true,
             isActive: false,
             day: i
@@ -116,7 +118,7 @@ function transformToArray(dateObject) {
         for(let i = 1; i <= dateObject.next.to; i++) {
             const currentDate = `0${i}`;
             const currentDateObject = {
-                date: `${nextYear}${nextMonth}${currentDate}`,
+                date: parseInt(`${nextYear}${nextMonth}${currentDate}`),
                 currentMonth: false,
                 isActive: false,
                 day: i
@@ -141,7 +143,17 @@ function getCurrentDate() {
     }
 }
 
+function convertFromNumber(date) {
+    const stringDate = date.toString();
+    const year = stringDate.substr(0, 4);
+    const month = stringDate.substr(4, 2);
+    const day = stringDate.substr(6, 2);
+
+    return `${year}/${month}/${day}`;
+}
+
 const calendarService = {
+    convertFromNumber,
     getCalendarDays,
     getCurrentDate
 };

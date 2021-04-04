@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import todoService from '../../services/todoService.js';
-import classes from './TodoContainer.module.css';
+import calendarService from '../../services/calendarService.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import classes from './TodoContainer.module.css';
 
 import Alert from '../Alert/Alert';
 import Spinner from '../Spinner/Spinner';
@@ -16,6 +17,7 @@ class TodoContainer extends Component {
         errorMessages: [],
         showCreateForm: false,
         todos: [],
+        currentDate: null,
         currentTodo: {
             title: null,
             description: null,
@@ -32,12 +34,14 @@ class TodoContainer extends Component {
         if(!todosResponse.successfull) {
             this.setState({
                 errorMessages: [...todosResponse.errorMessages],
-                isLoading: false
+                isLoading: false,
+                currentDate: date
             });
         } else {
             this.setState({
                 todos: [...todosResponse.data.todos],
-                isLoading: false
+                isLoading: false,
+                currentDate: date
             });
         }
     }
@@ -103,9 +107,11 @@ class TodoContainer extends Component {
             alerts.push(<Alert alert='danger' message={message} key={index} />);
         });
 
+        let stringDate = this.state.currentDate ? calendarService.convertFromNumber(this.state.currentDate) : null;
+
         return (
             <div className={classes.TodoContainer}>
-                <span className={classes.CurrentDate}>Current date: 2021/03/31</span>
+                <span className={classes.CurrentDate}>Current date: {stringDate}</span>
 
                 <div className={classes.TodoSection}>
                     <span className={classes.TodoSectionText}>Todo section:</span>
