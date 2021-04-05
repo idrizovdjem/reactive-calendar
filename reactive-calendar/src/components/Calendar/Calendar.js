@@ -45,7 +45,7 @@ class Calendar extends Component {
         const dateTodos = todosResponse.data.todos;
         dateTodos.forEach(todo => {
             const day = currentDays.find(day => day.date === todo.date);
-            if(day.todos.length < 1) {
+            if(day.todos.length < 3) {
                 day.todos.push(todo);
             }
         }); 

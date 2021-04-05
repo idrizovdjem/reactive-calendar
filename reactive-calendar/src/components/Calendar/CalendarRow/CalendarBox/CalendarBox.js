@@ -15,7 +15,7 @@ class CalendarBox extends Component {
         const todos = [];
         if(this.props.dateObject.todos.length > 0) {
             this.props.dateObject.todos.forEach((todo, index) => {
-                todos.push(<CalendarTodo title={todo.title} label={todo.label} key={index} />)
+                todos.push(<CalendarTodo backgroundColor={todo.label.backgroundColor} key={index} />)
             });
         }
 

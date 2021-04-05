@@ -1,12 +1,7 @@
 .TodoRow {
-    width: 100%;
-    height: 7vh;
-    text-align: left;
-}
-
-.TodoText {
+    margin: 0.25vh auto;
     width: 90%;
-    margin: auto;
-    overflow-x: hidden;
-    font-size: 4vh;
+    height: 2vh;
+    text-align: left;
+    border-radius: 5px;
 }
