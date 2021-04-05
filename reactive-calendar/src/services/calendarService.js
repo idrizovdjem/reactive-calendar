@@ -3,6 +3,9 @@ const weekday = require("dayjs/plugin/weekday");
 const weekOfYear = require("dayjs/plugin/weekOfYear");
 
 function getCalendarDays(year, month) {
+    // get the current month days
+    // previous month last days and next month start days
+
     dayjs.extend(weekday);
     dayjs.extend(weekOfYear);
 
@@ -12,6 +15,7 @@ function getCalendarDays(year, month) {
         current: {}
     }
 
+    // get the total days in the current month
     const currentDate = dayjs(`${year}/${month}/01`);
     let totalDays = currentDate.daysInMonth();
 
@@ -21,9 +25,24 @@ function getCalendarDays(year, month) {
         active: dayjs().date()
     }
 
+    if(result.current.start === 0) {
+        // if the start day is sunday
+        // change the number, so the calendar works correctly
+        result.current.start = 7;
+    }
+
     if (result.current.start !== 1) {
+        // check if the current month does not start in monday
+        // calculate how many days should the function take from
+        // the previous month
+        // * example (current month starts in Wednesday)
+        // * then the function takes the last two days from 
+        // * the previous day
+
+        // take the total days in the previous month
         const prevDate = dayjs(`${year}/${month - 1}/01`);
         const prevMonthDays = prevDate.daysInMonth();
+        // calculate the difference
         const previousDifference = prevMonthDays - (result.current.start - 2);
         totalDays += (prevMonthDays - previousDifference) + 1;
 
@@ -33,18 +52,44 @@ function getCalendarDays(year, month) {
         }
     }
 
-    if (totalDays < 35) {
+    if (totalDays < 42) {
+        // check if the total days to this moment (current month days + previous month days) is less than 42
+        // ? 42 => (the calendar has 6 rows with 7 days)
+        // calculate how many days should be taken from next month
         result.next = {
-            to: 35 - totalDays
+            to: 42 - totalDays
         }
     }
 
+    // ? example of the current result
+    /* 
+        result = {
+            current: {
+                start: 4, // ? (number between 1 and 7 (1-Mon, 7-Sun))
+                max: 30, // ? max days the current month has
+                active: 5 // ? the current date
+            },
+            previous: {
+                from: 29, // ? start date from previous month
+                to: 31 // ? end date from previous month
+            },
+            next: {
+                to: 9 // ? end date of next month
+            },
+            month: 4, // ? current month
+            year: 2021 // ? current year
+        }
+    */
+
+    // return the result object transformed to dates array
     return transformToArray(result);
 }
 
 function transformToArray(dateObject) {
+    // transforms dateObject to dates array
     const days = [];
 
+    // get the current year and month and convert them to numbers
     let { year, month } = dateObject;
     year = Number(year);
     month = Number(month);
@@ -53,6 +98,7 @@ function transformToArray(dateObject) {
     if(dateObject.previous) {
         let previousYear, previousMonth;
         
+        // get the previous month and year
         if(month === 1) {
             previousMonth = 12;
             previousYear = year - 1;
@@ -64,6 +110,7 @@ function transformToArray(dateObject) {
             previousYear = year;
         }
 
+        // generate the previous month dates
         for(let i = dateObject.previous.from; i <= dateObject.previous.to; i++) {
             days.push({
                 date: parseInt(`${previousYear}${previousMonth}${i}`),
@@ -82,6 +129,8 @@ function transformToArray(dateObject) {
     }
 
     for(let i = 1; i <= dateObject.current.max; i++) {
+        // generate current month dates
+
         let currentDate = i;
         if(currentDate < 10) {
             currentDate = `0${currentDate}`;
@@ -95,6 +144,7 @@ function transformToArray(dateObject) {
             todos: []
         };
 
+        // set the active flag to the current date
         if(i === dateObject.current.active) {
             currentDateObject.isActive = true;
         }
@@ -104,6 +154,9 @@ function transformToArray(dateObject) {
 
     // * generate objects if there are next month days
     if(dateObject.next) {
+        // generate next month dates
+
+        // calculate next month and year
         let nextYear, nextMonth;
         if(month === 12) {
             nextMonth = 1;
@@ -118,6 +171,7 @@ function transformToArray(dateObject) {
         }
 
         for(let i = 1; i <= dateObject.next.to; i++) {
+            // generate next month dates
             const currentDate = `0${i}`;
             const currentDateObject = {
                 date: parseInt(`${nextYear}${nextMonth}${currentDate}`),
@@ -147,6 +201,8 @@ function getCurrentDate() {
 }
 
 function convertFromNumber(date) {
+    // get date as number (20210405) and returns '2021/04/05'
+
     const stringDate = date.toString();
     const year = stringDate.substr(0, 4);
     const month = stringDate.substr(4, 2);

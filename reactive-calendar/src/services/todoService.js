@@ -1,7 +1,10 @@
 import axios from '../axios.js';
 
 async function getDailyTodos(date) {
+    // get todos for a date
+
     const authToken = localStorage.getItem('authToken');
+    // send authentication token and current date
     const response = await axios.post('/todo/daily', {
         authToken,
         date
@@ -12,7 +15,10 @@ async function getDailyTodos(date) {
 }
 
 async function getTodosForDates(startDate, endDate) {
+    // get todos for range of two dates
+
     const authToken = localStorage.getItem('authToken');
+    // send authentication token, startDate and endDate
     const response = await axios.post('/todo/getForDateRange', {
         authToken,
         startDate,

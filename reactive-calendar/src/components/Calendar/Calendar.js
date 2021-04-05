@@ -20,6 +20,10 @@ class Calendar extends Component {
     }
 
     updateDate = async () => {
+        // * get current date
+        // * get days for the calendar
+        // * get todos for the days
+
         this.setState({ isLoading: true });
 
         const currentDate = calendarService.getCurrentDate();
@@ -41,7 +45,7 @@ class Calendar extends Component {
         const dateTodos = todosResponse.data.todos;
         dateTodos.forEach(todo => {
             const day = currentDays.find(day => day.date === todo.date);
-            if(day.todos.length < 2) {
+            if(day.todos.length < 1) {
                 day.todos.push(todo);
             }
         }); 
@@ -66,10 +70,11 @@ class Calendar extends Component {
             return <Spinner />
         }
 
+        // display days
         const calendarRows = [];
         if (this.state.days.length !== 0) {
             let next = 0;
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 6; i++) {
                 const currentRowDays = [];
                 for (let j = 0; j < 7; j++) {
                     currentRowDays.push(this.state.days[next++]);

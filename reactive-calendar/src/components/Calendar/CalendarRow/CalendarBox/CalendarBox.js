@@ -10,6 +10,8 @@ class CalendarBox extends Component {
     }
 
     render() {
+        // display todos for the day
+
         const todos = [];
         if(this.props.dateObject.todos.length > 0) {
             this.props.dateObject.todos.forEach((todo, index) => {

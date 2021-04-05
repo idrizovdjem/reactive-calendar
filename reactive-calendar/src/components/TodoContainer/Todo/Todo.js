@@ -13,8 +13,8 @@ class Todo extends Component {
         this.setState({ icon: icon });
     }
 
+    // TODO: change todo isChecked
     changeCheckedHandler = () => {
-        // TODO: change todo isChecked
         const nextIcon = this.state.icon === faSquare ? faCheckSquare : faSquare;
         this.setState({ icon: nextIcon });
     }

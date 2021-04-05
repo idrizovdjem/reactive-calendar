@@ -26,6 +26,10 @@ class TodoContainer extends Component {
     };
     
     async componentDidMount() {
+        // * get select date
+        // * get todos for the selected date
+        // * update state
+
         const date = this.props.match.params.date;
 
         this.setState({ isLoading: true });
@@ -46,6 +50,7 @@ class TodoContainer extends Component {
         }
     }
 
+    // TODO: Implement todo create
     createTodoHandler = (title, description) => {
         if(!this.state.currentTodo.label) {
             alert('Choose label');
@@ -57,7 +62,6 @@ class TodoContainer extends Component {
         currentTodo.description = description;
 
         const todos = this.state.todos;
-        // TODO: Implement todo create
         this.setState({ 
             todos: [ ...todos, currentTodo ],
             currentTodo: {
@@ -70,6 +74,8 @@ class TodoContainer extends Component {
     }
 
     changeTodoLabelHandler = (label) => {
+        // change current selected label
+
         const currentTodo = this.state.currentTodo;
         currentTodo.label = label;
         this.setState({ currentTodo: currentTodo });
@@ -90,17 +96,20 @@ class TodoContainer extends Component {
             );
         }
 
+        // display todos for current date
         let todos = [];
         this.state.todos.forEach((todo, index) => {
             const element = <Todo title={todo.title} label={todo.label} isChecked={todo.isChecked} key={index} />
             todos.push(element);
         });
 
+        // display element if there are not todos
         let noTodosElement = null;
         if(this.state.todos.length === 0) {
             noTodosElement = <h3 className={classes.NoTodos}>No created todos! Create one :)</h3>
         }
 
+        // display spinner while loading
         const spinner = this.state.isLoading ? <Spinner /> : null;
         const alerts = [];
         this.state.errorMessages.forEach((message, index) => {

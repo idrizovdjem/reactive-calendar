@@ -1,14 +1,12 @@
 .TodoRow {
     width: 100%;
-    height: 4.25vh;
+    height: 7vh;
     text-align: left;
-    background-color: blueviolet;
 }
 
 .TodoText {
     width: 90%;
     margin: auto;
-    height: 4.25vh;
     overflow-x: hidden;
-    font-size: 2.75vh;
+    font-size: 4vh;
 }

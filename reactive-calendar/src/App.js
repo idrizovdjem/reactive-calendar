@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import authService from './services/authService.js';
 import history from './history.js';
 
@@ -21,23 +21,31 @@ class App extends Component {
   }
 
   redirect = (page) => {
-    sessionStorage.setItem('page', page);
     history.push(page);
+    sessionStorage.setItem('page', page);
     this.setState({ currentPage: page });
   }
 
   render() {
     const requireAuthentication = (Component, props) => {
+      // middleware function that checks if the user is authenticated
+      // if the user is not authenticated, he is redirected to Login page
+      // otherwise the desired component is rendered
+
       if (!authService.isUserAuthenticated()) {
-        return <Redirect push to='/Login' />
+        this.redirect('/Login');
       }
 
       return <Component redirect={this.redirect} {...props} />
     }
 
     const requireAnonymous = (Component, props) => {
+      // middleware function that checks if the user is not authenticated
+      // if he is not, then the app renderes the desired component
+      // if he is authenticated, he is redirected to Calendar component
+
       if (authService.isUserAuthenticated()) {
-        return <Redirect push to='/Calendar' />
+        this.redirect('/Calendar');
       }
 
       return <Component redirect={this.redirect} {...props} />
