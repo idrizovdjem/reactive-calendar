@@ -11,7 +11,8 @@ class Label extends Component {
     changeLabelHandler = () => {
         const label = {
             backgroundColor: this.props.backgroundColor,
-            color: this.props.color
+            color: this.props.color,
+            text: this.props.text
         };
 
         this.props.change(label);

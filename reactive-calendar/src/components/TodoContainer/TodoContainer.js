@@ -18,11 +18,7 @@ class TodoContainer extends Component {
         showCreateForm: false,
         todos: [],
         currentDate: null,
-        currentTodo: {
-            title: null,
-            description: null,
-            label: null
-        }
+        selectedLabel: null
     };
     
     async componentDidMount() {
@@ -50,35 +46,69 @@ class TodoContainer extends Component {
         }
     }
 
-    // TODO: Implement todo create
-    createTodoHandler = (title, description) => {
-        if(!this.state.currentTodo.label) {
+    createTodoHandler = async (title, description) => {
+        // validate label
+        if(!this.state.selectedLabel) {
             alert('Choose label');
             return;
         }
 
-        const currentTodo = this.state.currentTodo;
-        currentTodo.title = title;
-        currentTodo.description = description;
+        // validate title
+        if(!title) {
+            alert('Title is required!');
+            return;
+        } else {
+            title = title.trim();
+            if(title.length < 1) {
+                alert('Title is required!');
+                return;
+            }
+        }
 
-        const todos = this.state.todos;
-        this.setState({ 
-            todos: [ ...todos, currentTodo ],
-            currentTodo: {
-                title: null,
-                description: null,
-                label: null
-            },
-            showCreateForm: false
+        // validate description
+        if(!description) {
+            alert('Description is required!');
+            return;
+        } else {
+            description = description.trim();
+            if(description.length <  1) {
+                alert('Description is required!');
+                return;
+            }
+        }
+
+        this.setState({ isLoading: true });
+
+        const createTodoResponse = await todoService.create({
+            title,
+            description,
+            labelText: this.state.selectedLabel.text,
+            date: this.state.currentDate
         });
+
+        const todoResponse = createTodoResponse.data.response;
+
+        if(!todoResponse.successfull) {
+            this.setState({
+                errorMessages: [...todoResponse.errorMessages],
+                isLoading: false,
+                selectedLabel: null,
+                showCreateForm: false
+            });
+        } else {
+            const createdTodo = todoResponse.data.todo;
+            createdTodo.label = this.state.selectedLabel;
+            this.setState({
+                isLoading: false,
+                todos: [...this.state.todos, createdTodo],
+                selectedLabel: null,
+                showCreateForm: false
+            });
+        }
     }
 
     changeTodoLabelHandler = (label) => {
-        // change current selected label
-
-        const currentTodo = this.state.currentTodo;
-        currentTodo.label = label;
-        this.setState({ currentTodo: currentTodo });
+        this.setState({ selectedLabel: label });
     }
 
     toggleCreateFormVisibility = () => {
@@ -111,6 +141,8 @@ class TodoContainer extends Component {
 
         // display spinner while loading
         const spinner = this.state.isLoading ? <Spinner /> : null;
+
+        // display alerts
         const alerts = [];
         this.state.errorMessages.forEach((message, index) => {
             alerts.push(<Alert alert='danger' message={message} key={index} />);
