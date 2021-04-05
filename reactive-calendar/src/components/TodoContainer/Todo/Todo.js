@@ -2,30 +2,29 @@ import React, { Component } from 'react';
 import classes from './Todo.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare, faSquare } from '@fortawesome/free-solid-svg-icons';
+import todoService from '../../../services/todoService.js';
 
 class Todo extends Component {
     state = {
-        icon: faSquare
+        isChecked: this.props.isChecked
     }
 
-    componentDidMount() {
-        let icon = this.props.isChecked ? faCheckSquare : faSquare;
-        this.setState({ icon: icon });
-    }
-
-    // TODO: change todo isChecked
-    changeCheckedHandler = () => {
-        const nextIcon = this.state.icon === faSquare ? faCheckSquare : faSquare;
-        this.setState({ icon: nextIcon });
+    changeCheckedHandler = async () => {
+        const newCheckState = !this.state.isChecked;
+        const id = this.props.id;
+        this.setState({ isChecked: newCheckState });
+        await todoService.changeTodoCheckedState(id, newCheckState);
     }
 
     render() {
+        const nextIcon = this.state.isChecked ? faCheckSquare : faSquare;
+
         return (
             <div style={this.props.label} className={classes.Todo}>
                 <div style={{ color: this.props.label.color }} className={classes.TodoText}>
                     {this.props.title}
                 </div>
-                <FontAwesomeIcon onClick={this.changeCheckedHandler} icon={this.state.icon} className={classes.Icon} />
+                <FontAwesomeIcon onClick={this.changeCheckedHandler} icon={nextIcon} className={classes.Icon} />
             </div>
         );
     }

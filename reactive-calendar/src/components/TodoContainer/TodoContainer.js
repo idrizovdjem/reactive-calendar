@@ -128,8 +128,8 @@ class TodoContainer extends Component {
 
         // display todos for current date
         let todos = [];
-        this.state.todos.forEach((todo, index) => {
-            const element = <Todo title={todo.title} label={todo.label} isChecked={todo.isChecked} key={index} />
+        this.state.todos.forEach((todo) => {
+            const element = <Todo title={todo.title} label={todo.label} isChecked={todo.isChecked} key={todo.id} id={todo.id} />
             todos.push(element);
         });
 

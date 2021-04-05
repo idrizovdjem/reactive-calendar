@@ -30,6 +30,12 @@ async function create(data) {
     return response;
 }
 
+async function changeTodoCheckedState(todoId, newCheckState) {
+    const requestData = buildRequestData({ todoId, newCheckState });
+    const response = await axios.post('/todo/updateCheck', requestData);
+    return response;
+}
+
 function buildRequestData(data) {
     const authToken = localStorage.getItem('authToken');
     data.authToken = authToken;
@@ -37,6 +43,7 @@ function buildRequestData(data) {
 }
 
 const todoService = {
+    changeTodoCheckedState,
     getDailyTodos,
     getTodosForDates,
     create

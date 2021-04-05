@@ -54,4 +54,13 @@
     .Active {
         font-size: 4vh;
     }
+
+    .LeftBox {
+        display: none;
+    }
+
+    .RightBox {
+        text-align: center;
+        width: 100%;
+    }
 }
