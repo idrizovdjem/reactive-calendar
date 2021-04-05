@@ -21,6 +21,11 @@ function setup(sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         },
+        isChecked: {
+            type: DataTypes.BOOLEAN,
+            allowNull: null,
+            defaultValue: false
+        },
         labelId: {
             type: DataTypes.INTEGER,
             allowNull: false

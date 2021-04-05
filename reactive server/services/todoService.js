@@ -1,6 +1,6 @@
 const utilityService = require('./utilityService.js');
 const labelService = require('./labelService.js');
-const { Todo, Label } = require('../data/context.js');
+const { Todo } = require('../data/context.js');
 const { Op } = require('sequelize');
 
 async function create(userId, title, description, date, labelText) {
@@ -93,8 +93,10 @@ async function getForDate(userId, date) {
         const todos = [];
         for(const todo of todosArray) {
             const todoObject = {
-                'title': todo.title,
-                'description': todo.description
+                id: todo.id,
+                title: todo.title,
+                description: todo.description,
+                isChecked: todo.isChecked
             };
 
             const todoLabelResponse = await labelService.getById(todo.labelId);
@@ -176,8 +178,33 @@ async function getForRange(userId, startDate, endDate) {
     return response;
 }
 
+async function changeTodoCheckedState(todoId, newCheckState) {
+    const response = {
+        successfull: true,
+        errorMessages: [],
+        data: {}
+    };
+
+    const todo = await Todo.findOne({
+        where: {
+            id: todoId
+        }
+    });
+
+    if(todo === null) {
+        utilityService.addErrorMessage(response, 'Invalid todo id');
+        return response;
+    }
+
+    todo.isChecked = newCheckState;
+    await todo.save();
+
+    return response;
+}
+
 module.exports = {
     create,
     getForDate,
-    getForRange
+    getForRange,
+    changeTodoCheckedState
 };

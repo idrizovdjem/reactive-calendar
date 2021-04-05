@@ -34,4 +34,10 @@ router.post('/getForDateRange', async (request, response) => {
     response.json({ response: todosResponse });
 });
 
+router.post('/updateCheck', async (request, response) => {
+    const { todoId, newCheckState } = request.body;
+    const todosResponse = await todoService.changeTodoCheckedState(todoId, newCheckState);
+    response.json({ response: todosResponse });
+});
+
 module.exports = router;
