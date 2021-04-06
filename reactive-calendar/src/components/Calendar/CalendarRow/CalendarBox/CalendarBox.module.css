@@ -46,9 +46,11 @@
     font-size: 5vh;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 400px) {
     .Number {
-        font-size: 4vh;
+        font-size: 3vh;
+        margin-top: 1vh;
+        color: black;
     }
 
     .Active {
@@ -59,8 +61,25 @@
         display: none;
     }
 
+    .FirstRow {
+        height: 8vh;
+    }
+
+    .SecondRow {
+        height: 6vh;
+    }
+
     .RightBox {
+        margin-left: 0.4vh;
+        margin-top: 0.5vh;
         text-align: center;
-        width: 100%;
+        width: 90%;
+        background-color: lightblue;
+        border-radius: 100px;
+        height: 7vh;
+    }
+
+    .Active {
+        color: black;
     }
 }

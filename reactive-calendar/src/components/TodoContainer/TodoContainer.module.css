@@ -12,9 +12,9 @@
 }
 
 .TodoSection {
-    width: 80vw;
+    width: 90vw;
     margin-top: 2vh;
-    margin-left: 10vw;
+    margin-left: 5vw;
     text-align: left;
 }
 
@@ -34,7 +34,7 @@
 }
 
 .Form {
-    width: 80vw;
+    width: 90vw;
     float: left;
     margin-bottom: 2vh;
 }
@@ -47,7 +47,7 @@
     float: left;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 400px) {
     .TodoContainer {
         width: 95%;
     }

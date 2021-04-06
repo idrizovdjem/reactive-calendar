@@ -1,7 +1,6 @@
 .Todo {
-    width: 80vw;
+    width: 85vw;
     height: 8vh;
-    background-color: blueviolet;
     border-radius: 5px;
     margin-bottom: 1vh;
 }
@@ -28,7 +27,7 @@
     cursor: pointer;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 400px) {
     .TodoText {
         width: 60vw;
     }

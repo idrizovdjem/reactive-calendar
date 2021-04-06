@@ -41,7 +41,7 @@ class Login extends Component {
 
         if (result.successfull) {
             this.setState({ isLoading: false });
-            this.props.redirect('/Calendar');
+            this.props.redirect(this.props.history, '/Calendar', true);
         } else {
             this.setState({
                 errorMessages: [...result.errorMessages],

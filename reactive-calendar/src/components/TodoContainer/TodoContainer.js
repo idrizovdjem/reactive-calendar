@@ -116,6 +116,20 @@ class TodoContainer extends Component {
     }
 
     render() {
+        // display spinner while loading
+        if(this.state.isLoading) {
+            return <Spinner />
+        }
+
+        // display alerts
+        const alerts = [];
+        this.state.errorMessages.forEach((message, index) => {
+            alerts.push(<Alert alert='danger' message={message} key={index} />);
+        });
+        if(alerts.length > 0) {
+            return alerts;
+        }
+
         let createForm = null;
         if (this.state.showCreateForm) {
             createForm = (
@@ -137,16 +151,7 @@ class TodoContainer extends Component {
         let noTodosElement = null;
         if(this.state.todos.length === 0) {
             noTodosElement = <h3 className={classes.NoTodos}>No created todos! Create one :)</h3>
-        }
-
-        // display spinner while loading
-        const spinner = this.state.isLoading ? <Spinner /> : null;
-
-        // display alerts
-        const alerts = [];
-        this.state.errorMessages.forEach((message, index) => {
-            alerts.push(<Alert alert='danger' message={message} key={index} />);
-        });
+        }  
 
         let stringDate = this.state.currentDate ? calendarService.convertFromNumber(this.state.currentDate) : null;
 
@@ -161,8 +166,6 @@ class TodoContainer extends Component {
                     {createForm}
 
                     <div className={classes.Todos}>
-                        {alerts}
-                        {spinner}
                         {todos}
                     </div>
 

@@ -59,7 +59,7 @@ class Register extends Component {
 
         if(result.successfull) {
             this.setState({ isLoading: false });
-            this.props.redirect('/Calendar');
+            this.props.redirect(this.props.history, '/Calendar', true);
         } else {
             this.setState({
                 isLoading: false,

@@ -5,3 +5,10 @@
     text-align: left;
     border-radius: 5px;
 }
+
+@media screen and (max-width: 400px) {
+    .TodoRow {
+        margin: auto;
+        height: 1.9vh;
+    }
+}

@@ -1,5 +1,5 @@
 .TodoLabels {
-    width: 23vw;
+    width: 20vw;
     outline: 1px solid black;
     float: left;
     height: 49vh;
@@ -7,9 +7,9 @@
     margin-left: 3vh;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 400px) {
     .TodoLabels {
-        width: 95%;
+        width: 85vw;
         margin-left: 0;
         height: auto;
     }

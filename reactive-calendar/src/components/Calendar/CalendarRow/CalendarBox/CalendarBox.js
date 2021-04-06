@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import classes from './CalendarBox.module.css';
 
 import CalendarTodo from './CalendarTodo/CalendarTodo'
@@ -6,7 +7,7 @@ import CalendarTodo from './CalendarTodo/CalendarTodo'
 class CalendarBox extends Component {
     redirect = () => {
         const date = this.props.dateObject.date;
-        this.props.redirect(`/Todo/${date}`);
+        this.props.redirect(this.props.history, `/Todo/${date}`);
     }
 
     render() {
@@ -31,7 +32,7 @@ class CalendarBox extends Component {
                         </div>
                     </div>
                     <div className={classes.RightBox}>
-                        <span className={numberClass}>{date.day}</span>
+                        <p className={numberClass}>{date.day}</p>
                     </div>
                 </span>
                 <span className={classes.SecondRow}>
@@ -42,4 +43,4 @@ class CalendarBox extends Component {
     }
 }
 
-export default CalendarBox;
+export default withRouter(CalendarBox);

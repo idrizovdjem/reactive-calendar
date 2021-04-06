@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Router, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import authService from './services/authService.js';
-import history from './history.js';
 
 import Navigation from './components/Navigation/Navigation';
 import Login from './components/Login/Login';
@@ -11,19 +10,20 @@ import TodoContainer from './components/TodoContainer/TodoContainer';
 
 class App extends Component {
   state = {
-    redirect: null,
-    currentPage: null
-  };
-
-  componentDidMount() {
-    const lastPage = sessionStorage.getItem('page');
-    this.setState({ redirect: lastPage });
+    isAuthenticated: false
   }
 
-  redirect = (page) => {
+  componentDidMount() {
+    const isAuthenticated = authService.isUserAuthenticated();
+    this.setState({ isAuthenticated: isAuthenticated });
+  }
+
+  redirect = (history, page, authenticate) => {
     history.push(page);
     sessionStorage.setItem('page', page);
-    this.setState({ currentPage: page });
+    if(authenticate !== undefined) {
+      this.setState({ isAuthenticated: authenticate });
+    }
   }
 
   render() {
@@ -33,7 +33,7 @@ class App extends Component {
       // otherwise the desired component is rendered
 
       if (!authService.isUserAuthenticated()) {
-        this.redirect('/Login');
+        props.history.push('/Login');
       }
 
       return <Component redirect={this.redirect} {...props} />
@@ -45,7 +45,7 @@ class App extends Component {
       // if he is authenticated, he is redirected to Calendar component
 
       if (authService.isUserAuthenticated()) {
-        this.redirect('/Calendar');
+        props.history.push('/Calendar');
       }
 
       return <Component redirect={this.redirect} {...props} />
@@ -53,15 +53,16 @@ class App extends Component {
 
     return (
       <div>
-        <Navigation redirect={this.redirect} />
-        <Router history={history}>
+        <HashRouter>
+          <Navigation redirect={this.redirect} isAuthenticated={this.state.isAuthenticated} />
           <Switch>
-            <Route path='/Login' render={(props) => requireAnonymous(Login, props)} />
-            <Route path='/Register' render={(props) => requireAnonymous(Register, props)} />
-            <Route path='/Calendar' render={(props) => requireAuthentication(Calendar, props)} />
-            <Route path='/Todo/:date' render={(props) => requireAuthentication(TodoContainer, props)} />
+            <Route path='/Login' exact render={(props) => requireAnonymous(Login, props)} />
+            <Route path='/Register' exact render={(props) => requireAnonymous(Register, props)} />
+            <Route path='/Calendar' exact render={(props) => requireAuthentication(Calendar, props)} />
+            <Route path='/Todo/:date' exact render={(props) => requireAuthentication(TodoContainer, props)} />
+            <Route path='/' exact render={(props) => requireAuthentication(Calendar, props)} /> 
           </Switch>
-        </Router>
+        </HashRouter>
       </div>
     );
   }

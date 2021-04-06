@@ -1,22 +1,49 @@
 import React, { Component } from 'react';
+import { NavLink, withRouter } from 'react-router-dom';
 import authService from '../../services/authService.js';
 
 import classes from './Navigation.module.css';
 
 class Navigation extends Component {
+    state = {
+        showMobile: false
+    }
+
     redirect = (page) => {
-        this.props.redirect(page);
+        this.props.redirect(this.props.history, page);
     }
 
     logout = () => {
+        this.setState({ showMobile: false });
         authService.logout();
-        this.props.redirect('/Login');
+        this.props.redirect(this.props.history, '/Login', false);
+    }
+
+    toggleMobileButtons = () => {
+        this.setState({ showMobile: !this.state.showMobile });
     }
 
     render() {
-        let buttons = null;
+        let mobileButtons = null;
+        if (this.props.isAuthenticated) {
+            mobileButtons = (
+                <span>
+                    <div onClick={() => this.redirect('/Calendar')} className={classes.MobileLink}>Calendar</div>
+                    <div onClick={() => this.redirect('/Overview')} className={classes.MobileLink}>Overview</div>
+                    <div onClick={this.logout} className={classes.MobileLink}>Logout</div>
+                </span>
+            );
+        } else {
+            mobileButtons = (
+                <span>
+                    <div onClick={() => this.redirect('/Login')} className={classes.MobileLink}>Login</div>
+                    <div onClick={() => this.redirect('/Register')} className={classes.MobileLink}>Register</div>
+                </span>
+            );
+        }
 
-        if (authService.isUserAuthenticated()) {
+        let buttons = null;
+        if (this.props.isAuthenticated) {
             buttons = (
                 <span>
                     <button onClick={this.logout} className={classes.NavigationButton}>Logout</button>
@@ -27,19 +54,33 @@ class Navigation extends Component {
         } else {
             buttons = (
                 <span>
-                    <button onClick={() => this.redirect('/Register')} className={classes.NavigationButton}>Register</button>
-                    <button onClick={() => this.redirect('/Login')} className={classes.NavigationButton}>Login</button>
+                    <NavLink to='/Register' className={classes.NavigationButton}>Register</NavLink>
+                    <NavLink to='/Login' className={classes.NavigationButton}>Login</NavLink>
                 </span>
             );
         }
 
+        const mobileButtonsStyle = {
+            display: this.state.showMobile ? 'block' : 'none'
+        };
+
         return (
             <nav className={classes.Navigation}>
-                <span className={classes.Logo}>Reactive Calendar</span>
+                <span onClick={() => this.redirect('/')} to='/' className={classes.Logo}>Reactive Calendar</span>
                 {buttons}
+
+                <div onClick={this.toggleMobileButtons} className={classes.Burger}>
+                    <div className={classes.Slice}></div>
+                    <div className={classes.Slice}></div>
+                    <div className={classes.Slice}></div>
+                </div>
+
+                <div style={mobileButtonsStyle} className={classes.MobileButtons}>
+                    {mobileButtons}
+                </div>
             </nav>
         );
     }
 }
 
-export default Navigation;
+export default withRouter(Navigation);
