@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classes from './Calendar.module.css';
 import calendarService from '../../services/calendarService.js';
+import moodService from '../../services/moodService.js';
 import todoService from '../../services/todoService.js';
 
 import CalendarRow from './CalendarRow/CalendarRow';
@@ -50,11 +51,32 @@ class Calendar extends Component {
             }
         }); 
 
+        // update moods
+        const rawDayMoodsResponse = await moodService.getForRange(startDate, endDate);
+        const dayMoodsResponse = rawDayMoodsResponse.data.response;
+        const dayMoods = dayMoodsResponse.data.dateMoods;
+        dayMoods.forEach(dateMood => {
+            const date = currentDays.find(day => day.date === dateMood.date);
+            date.moodColor = this.getMoodColor(dateMood.mood);
+        });
+
         this.setState({
             isLoading: false,
             days: [...currentDays],
             date: currentDate
         });
+
+    }
+
+    getMoodColor = (mood) => {
+        switch(mood) {
+            case 'Excellent': return '#008000';
+            case 'Good': return '#38b000';
+            case 'Average': return '#ccff33';
+            case 'Bad': return '#f79d65';
+            case 'Miserable': return '#f27059';
+            default: return 'white';
+        }
     }
 
     render() {

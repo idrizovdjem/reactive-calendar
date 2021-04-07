@@ -11,7 +11,7 @@ class CalendarBox extends Component {
     }
 
     render() {
-        // display todos for the day
+        const moodColor = this.props.dateObject.moodColor || '#ccff33';
 
         const todos = [];
         if(this.props.dateObject.todos.length > 0) {
@@ -28,7 +28,7 @@ class CalendarBox extends Component {
             <td className={boxClass} onClick={this.redirect}>
                 <span className={classes.FirstRow}>
                     <div className={classes.LeftBox}>
-                        <div className={classes.ColorBox}>
+                        <div style={{backgroundColor: moodColor}} className={classes.ColorBox}>
                         </div>
                     </div>
                     <div className={classes.RightBox}>
