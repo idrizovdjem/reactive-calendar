@@ -15,6 +15,7 @@ const User = require('./models/User.model.js')(sequelize, DataTypes);
 const Session = require('./models/Session.model.js')(sequelize, DataTypes);
 const Label = require('./models/Label.model.js')(sequelize, DataTypes);
 const Todo = require('./models/Todo.model.js')(sequelize, DataTypes);
+const DateMood = require('./models/DateMood.model.js')(sequelize, DataTypes);
 
 (async function() {
     await sequelize.sync();
@@ -25,5 +26,6 @@ module.exports = {
     User,
     Session,
     Label,
-    Todo
+    Todo,
+    DateMood
 };
