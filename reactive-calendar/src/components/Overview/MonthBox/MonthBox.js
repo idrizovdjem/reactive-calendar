@@ -65,7 +65,7 @@ class MonthBox extends Component {
                     dayMoods.push(dateMood);
                 }
 
-                weekRows.push(<WeekRow dayMoods={dayMoods} key={week}/>);
+                weekRows.push(<WeekRow {...this.props} dayMoods={dayMoods} key={week}/>);
             }
         }
 

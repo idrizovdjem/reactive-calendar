@@ -20,7 +20,7 @@ class WeekRow extends Component {
         const dayBoxes = [];
         this.props.dayMoods.forEach(dayMood => {
             const currentMood = this.getMoodColor(dayMood.mood);
-            dayBoxes.push(<DayBox key={dayMood.date} moodColor={currentMood} />);
+            dayBoxes.push(<DayBox {...this.props} key={dayMood.date} date={dayMood.date} moodColor={currentMood} />);
         });
 
         return (
