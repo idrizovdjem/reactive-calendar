@@ -15,7 +15,7 @@
 .Popover {
     position: absolute;
     z-index: 100;
-    width: 15%;
+    width: 20vh;
     background-color: black;
     color: white;
     text-align: center;
