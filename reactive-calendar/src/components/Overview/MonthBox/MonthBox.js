@@ -11,7 +11,6 @@ class MonthBox extends Component {
     state = {
         isLoading: false,
         errorMessages: [],
-        dateMoods: [],
         monthDays: []
     }
 
@@ -19,13 +18,25 @@ class MonthBox extends Component {
         this.setState({ isLoading: true });
 
         const { year, month } = this.props;
-        const { from, to } = calendarService.getMonthRange(year, month);
-        const monthDays = calendarService.getCalendarDays(year, month);
-        const transformedMonthDays = monthDays.map(day => day.date);
-        this.setState({ monthDays: [...transformedMonthDays] });
+        const { from, to } = calendarService.getMonthData(year, month);
 
         const rawMoodResponse = await moodService.getForRange(from, to);
         const moodResponse = rawMoodResponse.data.response;
+        const dateMoods = moodResponse.data.dateMoods;
+
+        const monthDays = [];
+        for (let i = from - 1; i <= to; i++) {
+            const currentDateMood = dateMoods.find(dateMood => dateMood.date === i);
+            let mood = 'Missing';
+            if (currentDateMood !== undefined) {
+                mood = currentDateMood.mood;
+            }
+
+            monthDays.push({
+                date: i,
+                mood
+            });
+        }
 
         if (!moodResponse.successfull) {
             this.setState({
@@ -35,7 +46,7 @@ class MonthBox extends Component {
         } else {
             this.setState({
                 isLoading: false,
-                dateMoods: [...moodResponse.data.dateMoods]
+                monthDays: [...monthDays]
             });
         }
     }
@@ -46,26 +57,25 @@ class MonthBox extends Component {
 
         if (this.state.monthDays.length > 0) {
             let counter = 0;
-            for (let week = 0; week < 6; week++) {
-                const dayMoods = [];
 
+            for (let week = 0; week < 5; week++) {
+                const dayMoods = [];
                 for (let day = 0; day < 7; day++) {
-                    const currentDate = this.state.monthDays[counter++];
-                    const dateMood = {
-                        date: currentDate
-                    };
-                    
-                    const currentMood = this.state.dateMoods.find(dateMood => dateMood.date === currentDate);
-                    if(!currentMood) {
-                        dateMood.mood = 'Missing';
-                    } else {
-                        dateMood.mood = currentMood.mood;
+                    counter++;
+                    if (counter === this.state.monthDays.length) {
+                        break;
                     }
+
+                    const { date, mood } = this.state.monthDays[counter];
+                    const dateMood = {
+                        date,
+                        mood
+                    };
 
                     dayMoods.push(dateMood);
                 }
 
-                weekRows.push(<WeekRow {...this.props} dayMoods={dayMoods} key={week}/>);
+                weekRows.push(<WeekRow {...this.props} dayMoods={dayMoods} key={week} />);
             }
         }
 

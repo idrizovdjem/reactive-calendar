@@ -44,8 +44,8 @@ function buildRequestData(data) {
 
 const todoService = {
     changeTodoCheckedState,
-    getDailyTodos,
     getTodosForDates,
+    getDailyTodos,
     create
 };
 

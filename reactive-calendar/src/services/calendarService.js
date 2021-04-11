@@ -2,12 +2,12 @@ const dayjs = require('dayjs');
 const weekday = require("dayjs/plugin/weekday");
 const weekOfYear = require("dayjs/plugin/weekOfYear");
 
+dayjs.extend(weekday);
+dayjs.extend(weekOfYear);
+
 function getCalendarDays(year, month) {
     // get the current month days
     // previous month last days and next month start days
-
-    dayjs.extend(weekday);
-    dayjs.extend(weekOfYear);
 
     const result = {
         year,
@@ -25,7 +25,7 @@ function getCalendarDays(year, month) {
         active: dayjs().date()
     }
 
-    if(result.current.start === 0) {
+    if (result.current.start === 0) {
         // if the start day is sunday
         // change the number, so the calendar works correctly
         result.current.start = 7;
@@ -95,23 +95,23 @@ function transformToArray(dateObject) {
     month = Number(month);
 
     // * generate objects if there are previous month days
-    if(dateObject.previous) {
+    if (dateObject.previous) {
         let previousYear, previousMonth;
-        
+
         // get the previous month and year
-        if(month === 1) {
+        if (month === 1) {
             previousMonth = 12;
             previousYear = year - 1;
         } else {
             previousMonth = month - 1;
-            if(previousMonth < 10) {
+            if (previousMonth < 10) {
                 previousMonth = `0${previousMonth}`;
             }
             previousYear = year;
         }
 
         // generate the previous month dates
-        for(let i = dateObject.previous.from; i <= dateObject.previous.to; i++) {
+        for (let i = dateObject.previous.from; i <= dateObject.previous.to; i++) {
             days.push({
                 date: parseInt(`${previousYear}${previousMonth}${i}`),
                 currentMonth: false,
@@ -124,15 +124,15 @@ function transformToArray(dateObject) {
 
     // * generate current month days
     let currentMonth = month;
-    if(currentMonth < 10) {
+    if (currentMonth < 10) {
         currentMonth = `0${month}`;
     }
 
-    for(let i = 1; i <= dateObject.current.max; i++) {
+    for (let i = 1; i <= dateObject.current.max; i++) {
         // generate current month dates
 
         let currentDate = i;
-        if(currentDate < 10) {
+        if (currentDate < 10) {
             currentDate = `0${currentDate}`;
         }
 
@@ -145,7 +145,7 @@ function transformToArray(dateObject) {
         };
 
         // set the active flag to the current date
-        if(i === dateObject.current.active) {
+        if (i === dateObject.current.active) {
             currentDateObject.isActive = true;
         }
 
@@ -153,12 +153,12 @@ function transformToArray(dateObject) {
     }
 
     // * generate objects if there are next month days
-    if(dateObject.next) {
+    if (dateObject.next) {
         // generate next month dates
 
         // calculate next month and year
         let nextYear, nextMonth;
-        if(month === 12) {
+        if (month === 12) {
             nextMonth = 1;
             nextYear = year + 1;
         } else {
@@ -166,11 +166,11 @@ function transformToArray(dateObject) {
             nextYear = year;
         }
 
-        if(nextMonth < 10) {
+        if (nextMonth < 10) {
             nextMonth = `0${nextMonth}`;
         }
 
-        for(let i = 1; i <= dateObject.next.to; i++) {
+        for (let i = 1; i <= dateObject.next.to; i++) {
             // generate next month dates
             const currentDate = `0${i}`;
             const currentDateObject = {
@@ -213,6 +213,20 @@ function getCurrentYear() {
     return dayjs().format('YYYY');
 }
 
+function getMonthData(year, month) {
+    const currentDate = dayjs(`${year}/${month}/01`);
+    let totalDays = currentDate.daysInMonth();
+    let convertedMonth = month < 10 ? `0${month}` : month;
+
+    const from = parseInt(`${year}${convertedMonth}0${1}`);
+    const to = parseInt(`${year}${convertedMonth}${totalDays}`);
+
+    return {
+        from,
+        to
+    };
+}
+
 function convertFromNumber(date) {
     // get date as number (20210405) and returns '2021/04/05'
 
@@ -229,7 +243,8 @@ const calendarService = {
     getCalendarDays,
     getCurrentDate,
     getCurrentYear,
-    getMonthRange
+    getMonthRange,
+    getMonthData
 };
 
 export default calendarService;

@@ -2,7 +2,9 @@
     width: 85vw;
     height: 8vh;
     border-radius: 5px;
-    margin-bottom: 1vh;
+    margin-top: 1vh;
+    cursor: pointer;
+    user-select: none;
 }
 
 .TodoText {
@@ -21,6 +23,14 @@
     margin-top: 1.5vh;
     color: white;
     margin-right: 3vh;
+}
+
+.TodoDescription {
+    width: 85vw;
+    background-color: lightgray;
+    font-size: 4vh;
+    padding: 1vh;
+    border-radius: 5px;
 }
 
 .Icon:hover {

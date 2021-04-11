@@ -6,7 +6,8 @@ import todoService from '../../../services/todoService.js';
 
 class Todo extends Component {
     state = {
-        isChecked: this.props.isChecked
+        isChecked: this.props.isChecked,
+        showDescription: false
     }
 
     changeCheckedHandler = async () => {
@@ -16,15 +17,30 @@ class Todo extends Component {
         await todoService.changeTodoCheckedState(id, newCheckState);
     }
 
+    toggleDescriptionHandler = () => {
+        this.setState({ showDescription: !this.state.showDescription });
+    }
+
     render() {
         const nextIcon = this.state.isChecked ? faCheckSquare : faSquare;
+        let descriptionElement = null;
+        if (this.state.showDescription) {
+            descriptionElement = (
+                <div className={classes.TodoDescription}>
+                    {this.props.description}
+                </div>
+            );
+        }
 
         return (
-            <div style={this.props.label} className={classes.Todo}>
-                <div style={{ color: this.props.label.color }} className={classes.TodoText}>
-                    {this.props.title}
+            <div>
+                <div onClick={this.toggleDescriptionHandler} style={this.props.label} className={classes.Todo}>
+                    <div style={{ color: this.props.label.color }} className={classes.TodoText}>
+                        {this.props.title}
+                    </div>
+                    <FontAwesomeIcon onClick={this.changeCheckedHandler} icon={nextIcon} className={classes.Icon} />
                 </div>
-                <FontAwesomeIcon onClick={this.changeCheckedHandler} icon={nextIcon} className={classes.Icon} />
+                {descriptionElement}
             </div>
         );
     }
