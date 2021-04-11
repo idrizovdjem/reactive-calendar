@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/reactive-calendar/static/css/main.8e5be908.chunk.css",
-    "main.js": "/reactive-calendar/static/js/main.594ef142.chunk.js",
-    "main.js.map": "/reactive-calendar/static/js/main.594ef142.chunk.js.map",
+    "main.js": "/reactive-calendar/static/js/main.593aca28.chunk.js",
+    "main.js.map": "/reactive-calendar/static/js/main.593aca28.chunk.js.map",
     "runtime-main.js": "/reactive-calendar/static/js/runtime-main.d3466883.js",
     "runtime-main.js.map": "/reactive-calendar/static/js/runtime-main.d3466883.js.map",
     "static/js/2.2d53326c.chunk.js": "/reactive-calendar/static/js/2.2d53326c.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.d3466883.js",
     "static/js/2.2d53326c.chunk.js",
     "static/css/main.8e5be908.chunk.css",
-    "static/js/main.594ef142.chunk.js"
+    "static/js/main.593aca28.chunk.js"
   ]
 }
