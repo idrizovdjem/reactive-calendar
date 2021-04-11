@@ -57,7 +57,7 @@ class Calendar extends Component {
         const dayMoods = dayMoodsResponse.data.dateMoods;
         dayMoods.forEach(dateMood => {
             const date = currentDays.find(day => day.date === dateMood.date);
-            date.moodColor = this.getMoodColor(dateMood.mood);
+            date.moodColor = moodService.getMoodColor(dateMood.mood);
         });
 
         this.setState({
@@ -66,17 +66,6 @@ class Calendar extends Component {
             date: currentDate
         });
 
-    }
-
-    getMoodColor = (mood) => {
-        switch(mood) {
-            case 'Excellent': return '#008000';
-            case 'Good': return '#38b000';
-            case 'Average': return '#ccff33';
-            case 'Bad': return '#f79d65';
-            case 'Miserable': return '#f27059';
-            default: return 'white';
-        }
     }
 
     render() {

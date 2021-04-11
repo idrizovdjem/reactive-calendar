@@ -24,10 +24,22 @@ function buildRequestData(data) {
     return data;
 }
 
+function getMoodColor(mood) {
+    switch(mood) {
+        case 'Excellent': return '#008000';
+        case 'Good': return '#38b000';
+        case 'Average': return '#ccff33';
+        case 'Bad': return '#f79d65';
+        case 'Miserable': return '#f27059';
+        default: return 'white';
+    }
+}
+
 const moodService = {
     getForDay,
     updateMood,
-    getForRange
+    getForRange,
+    getMoodColor
 };
 
 export default moodService;
