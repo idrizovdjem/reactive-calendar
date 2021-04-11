@@ -4,8 +4,10 @@ import classes from './DayBox.module.css';
 class DayBox extends Component {
 
     render() {
+        const moodColor = this.props.moodColor;
+
         return (
-            <div className={classes.DayBox}>
+            <div style={{backgroundColor: moodColor}} className={classes.DayBox}>
 
             </div>
         );

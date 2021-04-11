@@ -200,6 +200,19 @@ function getCurrentDate() {
     }
 }
 
+function getMonthRange(year, month) {
+    const monthDays = getCalendarDays(year, month);
+
+    return {
+        from: monthDays[0].date,
+        to: monthDays[monthDays.length - 1].date
+    };
+}
+
+function getCurrentYear() {
+    return dayjs().format('YYYY');
+}
+
 function convertFromNumber(date) {
     // get date as number (20210405) and returns '2021/04/05'
 
@@ -214,7 +227,9 @@ function convertFromNumber(date) {
 const calendarService = {
     convertFromNumber,
     getCalendarDays,
-    getCurrentDate
+    getCurrentDate,
+    getCurrentYear,
+    getMonthRange
 };
 
 export default calendarService;
