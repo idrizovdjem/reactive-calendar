@@ -1,0 +1,9 @@
+.DayBox {
+    width: 13%;
+    height: 4.2vh;
+    float: left;
+    border: 1px solid black;
+    margin-top: 0.3vh;
+    margin-left: 1.1%;
+    border-radius: 7px;
+}

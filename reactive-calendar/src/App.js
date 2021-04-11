@@ -7,6 +7,7 @@ import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import Calendar from './components/Calendar/Calendar';
 import TodoContainer from './components/TodoContainer/TodoContainer';
+import Overview from './components/Overview/Overview.js';
 
 class App extends Component {
   state = {
@@ -60,6 +61,7 @@ class App extends Component {
             <Route path='/Register' exact render={(props) => requireAnonymous(Register, props)} />
             <Route path='/Calendar' exact render={(props) => requireAuthentication(Calendar, props)} />
             <Route path='/Todo/:date' exact render={(props) => requireAuthentication(TodoContainer, props)} />
+            <Route path='/Overview' exact render={(props) => requireAuthentication(Overview, props)} />
             <Route path='/' exact render={(props) => requireAuthentication(Calendar, props)} /> 
           </Switch>
         </HashRouter>

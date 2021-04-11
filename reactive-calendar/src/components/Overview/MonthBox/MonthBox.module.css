@@ -1,0 +1,7 @@
+.MonthBox {
+    width: 20%;
+    margin: 0 2.5%;
+    height: 29vh;
+    float: left;
+    outline: 1px solid black;
+}
