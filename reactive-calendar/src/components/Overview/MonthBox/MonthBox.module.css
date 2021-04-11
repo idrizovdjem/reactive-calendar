@@ -5,3 +5,10 @@
     float: left;
     outline: 1px solid black;
 }
+
+@media screen and (max-width: 400px) {
+    .MonthBox {
+        width: 45%;
+        margin: 2% 2%;
+    }
+}

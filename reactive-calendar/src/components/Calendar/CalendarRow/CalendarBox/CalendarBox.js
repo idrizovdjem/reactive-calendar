@@ -11,7 +11,7 @@ class CalendarBox extends Component {
     }
 
     render() {
-        const moodColor = this.props.dateObject.moodColor || '#ccff33';
+        const moodColor = this.props.dateObject.moodColor || '#ebedf0';
 
         const todos = [];
         if(this.props.dateObject.todos.length > 0) {
