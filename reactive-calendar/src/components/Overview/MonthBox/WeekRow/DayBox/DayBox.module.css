@@ -11,3 +11,17 @@
 .DayBox:hover {
     cursor: pointer;
 }
+
+.Popover {
+    position: absolute;
+    z-index: 100;
+    width: 10%;
+    background-color: black;
+    color: white;
+    text-align: center;
+    margin-top: -5vh;
+    font-size: 3vh;
+    border-radius: 10px;
+    padding: 2px 0;
+    margin-left: -3.5%;
+}
