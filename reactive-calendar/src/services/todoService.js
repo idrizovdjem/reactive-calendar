@@ -42,6 +42,12 @@ async function deleteTodo(todoId) {
     return response;
 }
 
+async function updateTodo(todoId, title, description) {
+    const requestData = buildRequestData({ todoId, title, description });
+    const response = await axios.post('/todo/update', requestData);
+    return response;
+}
+
 function buildRequestData(data) {
     const authToken = localStorage.getItem('authToken');
     data.authToken = authToken;
@@ -53,6 +59,7 @@ const todoService = {
     getTodosForDates,
     getDailyTodos,
     deleteTodo,
+    updateTodo,
     create
 };
 

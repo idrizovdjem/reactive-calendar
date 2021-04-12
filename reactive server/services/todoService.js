@@ -230,10 +230,59 @@ async function deleteTodo(todoId) {
     return response;
 }
 
+async function updateTodo(todoId, title, description) {
+    const response = {
+        successfull: true,
+        errorMessages: [],
+        data: {}
+    };
+
+    if(!todoId) {
+        utilityService.addErrorMessage(response, 'Invalid todo id!');
+    }
+
+    if(!title) {
+        utilityService.addErrorMessage(response, 'Todo title is required!');
+    } else {
+        title = title.trim();
+        if(title.length < 1) {
+            utilityService.addErrorMessage(response, 'Todo title must be at least symbol long!');
+        }
+    }
+
+    if(!description) {
+        utilityService.addErrorMessage(response, 'Todo description is required!');
+    } else {
+        description = description.trim();
+        if(description.length < 1) {
+            utilityService.addErrorMessage(response, 'Todo description must be at least symbol long!');
+        }
+    }
+
+    if(response.successfull) {
+        const todo = await Todo.findOne({
+            where: {
+                id: todoId
+            }
+        });
+
+        if(todo === null) {
+            return response;
+        }
+
+        todo.title = title;
+        todo.description = description;
+        await todo.save();
+    }
+
+    return response;
+}
+
 module.exports = {
     create,
     deleteTodo,
     getForDate,
+    updateTodo,
     getForRange,
     changeTodoCheckedState
 };
