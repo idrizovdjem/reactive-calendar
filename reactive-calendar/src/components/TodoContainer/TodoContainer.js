@@ -139,6 +139,20 @@ class TodoContainer extends Component {
         this.setState({ currentMood: selectedMood });
     }
 
+    deleteTodo = (todoId) => {
+        const todosCopy = this.state.todos.slice();
+        const todoIndex = todosCopy.findIndex(todo => todo.id === todoId);
+        
+        if(todoIndex === -1) {
+            return;
+        }
+
+        todoService.deleteTodo(todoId);
+
+        todosCopy.splice(todoIndex, 1);
+        this.setState({ todos: [...todosCopy] });
+    }
+
     render() {
         // display spinner while loading
         if (this.state.isLoading) {
@@ -167,7 +181,7 @@ class TodoContainer extends Component {
         // display todos for current date
         let todos = [];
         this.state.todos.forEach((todo) => {
-            const element = <Todo title={todo.title} label={todo.label} isChecked={todo.isChecked} key={todo.id} id={todo.id} description={todo.description} />
+            const element = <Todo todo={todo} onDelete={this.deleteTodo} key={todo.id} />
             todos.push(element);
         });
 

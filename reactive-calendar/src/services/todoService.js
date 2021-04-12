@@ -18,8 +18,8 @@ async function getTodosForDates(startDate, endDate) {
     };
     const requestData = buildRequestData(data);
     // send authentication token, startDate and endDate
+    
     const response = await axios.post('/todo/getForDateRange',requestData);
-
     const todosResponse = response.data.response;
     return todosResponse;
 }
@@ -36,6 +36,12 @@ async function changeTodoCheckedState(todoId, newCheckState) {
     return response;
 }
 
+async function deleteTodo(todoId) {
+    const requestData = buildRequestData({ todoId });
+    const response = await axios.post('/todo/delete', requestData);
+    return response;
+}
+
 function buildRequestData(data) {
     const authToken = localStorage.getItem('authToken');
     data.authToken = authToken;
@@ -46,6 +52,7 @@ const todoService = {
     changeTodoCheckedState,
     getTodosForDates,
     getDailyTodos,
+    deleteTodo,
     create
 };
 
