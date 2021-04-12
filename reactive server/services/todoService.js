@@ -202,8 +202,37 @@ async function changeTodoCheckedState(todoId, newCheckState) {
     return response;
 }
 
+async function deleteTodo(todoId) {
+    const response = {
+        successfull: true,
+        errorMessages: [],
+        data: {}
+    };
+
+    if(!todoId) {
+        utilityService.addErrorMessage(response, 'Invalid todo id!');
+    }
+
+    if(response.successfull) {
+        const todo = await Todo.findOne({
+            where: {
+                id: todoId
+            }
+        });
+
+        if(todo === null) {
+            return response;
+        }
+
+        await todo.destroy();
+    }
+
+    return response;
+}
+
 module.exports = {
     create,
+    deleteTodo,
     getForDate,
     getForRange,
     changeTodoCheckedState

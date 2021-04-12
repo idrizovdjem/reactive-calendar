@@ -40,4 +40,10 @@ router.post('/updateCheck', async (request, response) => {
     response.json({ response: todosResponse });
 });
 
+router.post('/delete', async (request, response) => {
+    const { todoId } = request.body;
+    const todosResponse = await todoService.deleteTodo(todoId);
+    response.json({ response: todosResponse });
+});
+
 module.exports = router;
