@@ -82,6 +82,10 @@
 
 @media screen and (max-width: 400px) {
     .TodoText {
-        width: 60vw;
+        width: 85vw;
+    }
+
+    .EditButtonsContainer {
+
     }
 }
