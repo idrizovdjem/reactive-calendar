@@ -9,7 +9,12 @@
     text-align: center;
     width: 14.28%;
     float: left;
-    outline: 1px solid black;
+    border: 1px solid black;
+    border-left: none;
+}
+
+.HeaderBox:first-of-type {
+    border-left: 1px solid black;
 }
 
 .Mon::after {
