@@ -107,10 +107,6 @@ class Todo extends Component {
                 <div>
                     <div style={this.props.todo.label} className={classes.Todo}>
                         <input ref={this.titleInput} className={classes.EditInput} type='text' defaultValue={this.state.title} />
-
-                        <FontAwesomeIcon onClick={this.deleteTodoHandler} icon={faTimes} className={classes.Icon} />
-                        <FontAwesomeIcon onClick={this.editTodoHandler} icon={faPen} className={classes.Icon} />
-                        <FontAwesomeIcon onClick={this.changeCheckedHandler} icon={nextCheckIcon} className={classes.Icon} />
                     </div>
                     <div className={classes.EditButtonsContainer}>
                         <button onClick={this.saveChangesHandler} className={`${classes.EditButton} ${classes.SaveChanges}`}>Save changes</button>
@@ -122,6 +118,10 @@ class Todo extends Component {
             if (this.state.showDescription) {
                 descriptionElement = (
                     <div className={classes.TodoDescription}>
+                        <div className={classes.ButtonsContainer}>
+                            <FontAwesomeIcon onClick={this.editTodoHandler} icon={faPen} className={classes.Icon} />
+                            <FontAwesomeIcon onClick={this.deleteTodoHandler} icon={faTimes} className={classes.Icon} />
+                        </div>
                         {this.state.description}
                     </div>
                 );
@@ -133,9 +133,7 @@ class Todo extends Component {
                         <div style={{ color: this.props.todo.label.color }} className={classes.TodoText}>
                             {this.state.title}
                         </div>
-                        <FontAwesomeIcon onClick={this.deleteTodoHandler} icon={faTimes} className={classes.Icon} />
-                        <FontAwesomeIcon onClick={this.editTodoHandler} icon={faPen} className={classes.Icon} />
-                        <FontAwesomeIcon onClick={this.changeCheckedHandler} icon={nextCheckIcon} className={classes.Icon} />
+                        <FontAwesomeIcon onClick={this.changeCheckedHandler} icon={nextCheckIcon} className={classes.CheckIcon} />
                     </div>
                     {descriptionElement}
                 </div>);

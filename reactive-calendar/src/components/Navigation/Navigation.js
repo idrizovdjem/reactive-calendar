@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavLink, withRouter } from 'react-router-dom';
+import {  withRouter } from 'react-router-dom';
 import authService from '../../services/authService.js';
 
 import classes from './Navigation.module.css';
@@ -54,8 +54,8 @@ class Navigation extends Component {
         } else {
             buttons = (
                 <span>
-                    <NavLink to='/Register' className={classes.NavigationButton}>Register</NavLink>
-                    <NavLink to='/Login' className={classes.NavigationButton}>Login</NavLink>
+                    <button onClick={() => this.redirect('/Register')} className={classes.NavigationButton}>Register</button>
+                    <button onClick={() => this.redirect('/Login')} className={classes.NavigationButton}>Login</button>
                 </span>
             );
         }
