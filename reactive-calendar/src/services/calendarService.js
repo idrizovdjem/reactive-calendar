@@ -172,7 +172,7 @@ function transformToArray(dateObject) {
 
         for (let i = 1; i <= dateObject.next.to; i++) {
             // generate next month dates
-            const currentDate = `0${i}`;
+            const currentDate = i < 10 ? `0${i}` : i;
             const currentDateObject = {
                 date: parseInt(`${nextYear}${nextMonth}${currentDate}`),
                 currentMonth: false,
@@ -189,9 +189,9 @@ function transformToArray(dateObject) {
 }
 
 function getCurrentDate() {
-    const year = dayjs().format('YYYY');
-    const month = dayjs().format('M');
-    const day = dayjs().format('D');
+    const year = Number(dayjs().format('YYYY'));
+    const month = Number(dayjs().format('M'));
+    const day = Number(dayjs().format('D'));
 
     return {
         year,

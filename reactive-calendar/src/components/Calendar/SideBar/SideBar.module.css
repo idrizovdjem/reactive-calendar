@@ -1,0 +1,6 @@
+.SideBar {
+    width: 20vw;
+    float: left;
+    height: 93vh;
+    outline: 1px solid black;
+}

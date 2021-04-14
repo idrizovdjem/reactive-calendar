@@ -68,8 +68,7 @@ class Todo extends Component {
                 return;
             }
         }
-
-        // TODO IMPLEMENT
+        
         this.setState({
             title,
             description

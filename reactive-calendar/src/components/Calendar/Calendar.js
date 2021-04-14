@@ -1,119 +1,160 @@
-import React, { Component } from 'react';
-import classes from './Calendar.module.css';
-import calendarService from '../../services/calendarService.js';
-import moodService from '../../services/moodService.js';
-import todoService from '../../services/todoService.js';
+import React, { Component } from "react";
+import classes from "./Calendar.module.css";
+import calendarService from "../../services/calendarService.js";
+import moodService from "../../services/moodService.js";
+import todoService from "../../services/todoService.js";
 
-import CalendarRow from './CalendarRow/CalendarRow';
-import Spinner from '../Spinner/Spinner';
-import Alert from '../Alert/Alert';
+import SideBar from "./SideBar/SideBar";
+import CalendarRow from "./CalendarRow/CalendarRow";
+import Spinner from "../Spinner/Spinner";
+import Alert from "../Alert/Alert";
 
 class Calendar extends Component {
-    state = {
-        isLoading: false,
-        errorMessages: [],
-        days: [],
-        date: {}
-    };
+	state = {
+		isLoading: false,
+		errorMessages: [],
+		days: [],
+		date: {},
+	};
 
-    async componentDidMount() {
-        await this.updateDate();
-    }
+	componentDidMount() {
+		// * get current date
+		// * get days for the calendar
+		// * get todos for the days
 
-    updateDate = async () => {
-        // * get current date
-        // * get days for the calendar
-        // * get todos for the days
+		const currentDate = calendarService.getCurrentDate();
+		this.setState({ date: currentDate }, async () => {
+			await this.updateCalendar();
+		});	
+	}
 
-        this.setState({ isLoading: true });
+	updateCalendar = async () => {
+		this.setState({ isLoading: true });
+		const { year, month } = this.state.date;
 
-        const currentDate = calendarService.getCurrentDate();
-        const { year, month } = currentDate;
-        const currentDays = calendarService.getCalendarDays(year, month);
+		const currentDays = calendarService.getCalendarDays(year, month);
 
-        const startDate = currentDays[0].date;
-        const endDate = currentDays[currentDays.length - 1].date;
+		const startDate = currentDays[0].date;
+		const endDate = currentDays[currentDays.length - 1].date;
+		
+		const todosResponse = await todoService.getTodosForDates(
+			startDate,
+			endDate
+		);
+		if (!todosResponse.successfull) {
+			this.setState({
+				isLoading: false,
+				errorMessages: [...todosResponse.errorMessages],
+			});
+			return;
+		}
 
-        const todosResponse = await todoService.getTodosForDates(startDate, endDate);
-        if(!todosResponse.successfull) {
-            this.setState({
-                isLoading: false,
-                errorMessages: [...todosResponse.errorMessages]
-            });
-            return;
-        }
+		const dateTodos = todosResponse.data.todos;
+		dateTodos.forEach((todo) => {
+			const day = currentDays.find((day) => day.date === todo.date);
+			
+			if (day.todos.length < 3) {
+				day.todos.push(todo);
+			}
+		});
 
-        const dateTodos = todosResponse.data.todos;
-        dateTodos.forEach(todo => {
-            const day = currentDays.find(day => day.date === todo.date);
-            if(day.todos.length < 3) {
-                day.todos.push(todo);
-            }
-        }); 
+		// update moods
+		const rawDayMoodsResponse = await moodService.getForRange(
+			startDate,
+			endDate
+		);
+		const dayMoodsResponse = rawDayMoodsResponse.data.response;
+		const dayMoods = dayMoodsResponse.data.dateMoods;
+		dayMoods.forEach((dateMood) => {
+			const date = currentDays.find((day) => day.date === dateMood.date);
+			date.moodColor = moodService.getMoodColor(dateMood.mood);
+		});
 
-        // update moods
-        const rawDayMoodsResponse = await moodService.getForRange(startDate, endDate);
-        const dayMoodsResponse = rawDayMoodsResponse.data.response;
-        const dayMoods = dayMoodsResponse.data.dateMoods;
-        dayMoods.forEach(dateMood => {
-            const date = currentDays.find(day => day.date === dateMood.date);
-            date.moodColor = moodService.getMoodColor(dateMood.mood);
-        });
+		this.setState({
+			isLoading: false,
+			days: [...currentDays]
+		});
+	}
 
-        this.setState({
-            isLoading: false,
-            days: [...currentDays],
-            date: currentDate
-        });
+	async componentDidUpdate(prevProps, prevState) {
+		const prevDate = prevState.date;
 
-    }
+		if(prevDate.year !== this.state.date.year || prevDate.month !== this.state.date.month) {
+			await this.updateCalendar();
+		}
+	}
 
-    render() {
-        if(this.state.errorMessages.length > 0) {
-            const alerts = this.state.errorMessages.map((message, index) => {
-                return <Alert alert='danger' message={message} key={index} />
-            });
+	updateDate = (year, month) => {
+		const { day } = this.state.date;
 
-            return alerts;
-        }
+		this.setState({
+			date: {
+				year,
+				month,
+				day
+			}
+		});
+	};
 
-        if(this.state.isLoading) {
-            return <Spinner />
-        }
+	render() {
+		if (this.state.errorMessages.length > 0) {
+			const alerts = this.state.errorMessages.map((message, index) => {
+				return <Alert alert="danger" message={message} key={index} />;
+			});
 
-        // display days
-        const calendarRows = [];
-        if (this.state.days.length !== 0) {
-            let next = 0;
-            for (let i = 0; i < 6; i++) {
-                const currentRowDays = [];
-                for (let j = 0; j < 7; j++) {
-                    currentRowDays.push(this.state.days[next++]);
-                }
+			return alerts;
+		}
 
-                calendarRows.push(<CalendarRow redirect={this.props.redirect} key={i} days={currentRowDays} />);
-            }
-        }
+		if (this.state.isLoading) {
+			return <Spinner />;
+		}
 
-        return (
-            <table className={classes.Calendar}>
-                <thead>
-                    <tr>
-                        <th>Mon</th>
-                        <th>Tue</th>
-                        <th>Wed</th>
-                        <th>Thu</th>
-                        <th>Fri</th>
-                        <th>Sat</th>
-                        <th>Sun</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {calendarRows}
-                </tbody>
-            </table>
-        );
-    }
+		// display days
+		const calendarRows = [];
+		if (this.state.days.length !== 0) {
+			let next = 0;
+			for (let i = 0; i < 6; i++) {
+				const currentRowDays = [];
+				for (let j = 0; j < 7; j++) {
+					currentRowDays.push(this.state.days[next++]);
+				}
+
+				calendarRows.push(
+					<CalendarRow
+						redirect={this.props.redirect}
+						key={i}
+						days={currentRowDays}
+					/>
+				);
+			}
+		}
+
+		const sideBarDateObject = {
+			year: this.state.date.year || 0,
+			month: this.state.date.month || 0
+		};
+	
+		return (
+			<div>
+				<SideBar date={sideBarDateObject} updateDate={this.updateDate} />
+
+				<table className={classes.Calendar}>
+					<thead>
+						<tr>
+							<th>Mon</th>
+							<th>Tue</th>
+							<th>Wed</th>
+							<th>Thu</th>
+							<th>Fri</th>
+							<th>Sat</th>
+							<th>Sun</th>
+						</tr>
+					</thead>
+					<tbody>{calendarRows}</tbody>
+				</table>
+			</div>
+		);
+	}
 }
 
 export default Calendar;

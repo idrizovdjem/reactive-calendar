@@ -1,8 +1,10 @@
 .Calendar {
     width: 70vw;
-    margin: 1vh auto;
+    margin-top: 1vh;
+    margin-left: 5vw;
     height: 90vh;
     user-select: none;
+    float: left;
 }
 
 thead tr {

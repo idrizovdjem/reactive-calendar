@@ -1,0 +1,15 @@
+.DateContainer {
+    text-align: center;
+    font-size: 4vh;
+    user-select: none;
+}
+
+.Button {
+    margin: 0 2vh;
+    color: gray;
+}
+
+.Button:hover {
+    color: black;
+    cursor: pointer;
+}
