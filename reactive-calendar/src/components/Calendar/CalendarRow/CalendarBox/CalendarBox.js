@@ -64,7 +64,7 @@ class CalendarBox extends Component {
         }
 
         return (
-            <td className={boxClass} onClick={this.redirect}>
+            <div className={boxClass} onClick={this.redirect}>
                 <span className={classes.FirstRow}>
                     <div className={classes.LeftBox}>
                         <div onMouseLeave={this.hidePopoverHandler} onMouseOver={this.showPopoverHandler} style={{ backgroundColor: this.state.moodColor }} className={classes.ColorBox}>
@@ -78,7 +78,7 @@ class CalendarBox extends Component {
                 <span className={classes.SecondRow}>
                     {todos}
                 </span>
-            </td>
+            </div>
         );
     }
 }

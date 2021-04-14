@@ -5,6 +5,7 @@ import moodService from "../../services/moodService.js";
 import todoService from "../../services/todoService.js";
 
 import SideBar from "./SideBar/SideBar";
+import CalendarHeaderRow from './CalendarHeaderRow/CalendarHeaderRow';
 import CalendarRow from "./CalendarRow/CalendarRow";
 import Spinner from "../Spinner/Spinner";
 import Alert from "../Alert/Alert";
@@ -133,25 +134,14 @@ class Calendar extends Component {
 			year: this.state.date.year || 0,
 			month: this.state.date.month || 0
 		};
-	
+		
 		return (
 			<div>
 				<SideBar date={sideBarDateObject} updateDate={this.updateDate} />
-
-				<table className={classes.Calendar}>
-					<thead>
-						<tr>
-							<th>Mon</th>
-							<th>Tue</th>
-							<th>Wed</th>
-							<th>Thu</th>
-							<th>Fri</th>
-							<th>Sat</th>
-							<th>Sun</th>
-						</tr>
-					</thead>
-					<tbody>{calendarRows}</tbody>
-				</table>
+				<div className={classes.Calendar}>
+					<CalendarHeaderRow />
+					{calendarRows}
+				</div>
 			</div>
 		);
 	}

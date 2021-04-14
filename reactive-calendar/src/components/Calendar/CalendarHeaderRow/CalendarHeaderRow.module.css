@@ -1,0 +1,71 @@
+.CalendarHeaderRow {
+    width: 100%;
+    height: 5vh;
+    font-size: 4vh;
+    margin-bottom: 1vh;
+}
+
+.HeaderBox {
+    text-align: center;
+    width: 14.28%;
+    float: left;
+    outline: 1px solid black;
+}
+
+.Mon::after {
+    content: 'Mon';
+}
+
+.Tue::after {
+    content: 'Tue';
+}
+
+.Wed::after {
+    content: 'Wed';
+}
+
+.Thu::after {
+    content: 'Thu';
+}
+
+.Fri::after {
+    content: 'Fri';
+}
+
+.Sat::after {
+    content: 'Sat';
+}
+
+.Sun::after {
+    content: 'Sun';
+}
+
+@media screen and (max-width: 400px) {
+    .Mon:after {
+        content: 'M';
+    }
+
+    .Tue::after {
+        content: 'T';
+    }
+
+    .Wed::after {
+        content: 'W';
+    }
+
+    .Thu::after {
+        content: 'T';
+    }
+
+    .Fri::after {
+        content: 'F';
+    }
+
+    .Sat::after {
+        content: 'S';
+    }
+
+    .Sun::after {
+        content: 'S';
+    }
+}

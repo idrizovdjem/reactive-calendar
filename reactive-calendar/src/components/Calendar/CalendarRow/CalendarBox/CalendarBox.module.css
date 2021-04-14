@@ -1,8 +1,11 @@
 .Box {
     margin: 0;
     padding: 0;
-    border: 1px solid black;
+    float: left;
+    width: 14.28%;
+    height: 14vh;
     background-color: #B0B0B0;
+    outline: 1px solid black;
 }
 
 .Current:hover, .Box:hover {
@@ -11,9 +14,12 @@
 }
 
 .Current {
+    outline: 1px solid black;
+    float: left;
+    width: 14.28%;
+    height: 14vh;
     margin: 0;
     padding: 0;
-    border: 1px solid black;
     background-color: white;
 }
 
