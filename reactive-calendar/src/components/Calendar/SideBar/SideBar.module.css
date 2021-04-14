@@ -1,6 +1,14 @@
 .SideBar {
+    margin-top: 3vh;
+    padding-left: 5vh;
     width: 20vw;
     float: left;
-    height: 93vh;
-    outline: 1px solid black;
+}
+
+@media screen and (max-width: 400px) {
+    .SideBar {
+        width: 100%;
+        padding-left: 0;
+        margin-top: 0;
+    }
 }
