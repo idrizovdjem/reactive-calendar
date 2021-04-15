@@ -7,8 +7,13 @@
     user-select: none;
 }
 
+.Title {
+    padding: 0;
+    font-weight: 600;
+}
+
 .TodoText {
-    overflow-x: hidden;
+    overflow: hidden;
     width: 70vw;
     height: 8vh;
     font-size: 5vh;

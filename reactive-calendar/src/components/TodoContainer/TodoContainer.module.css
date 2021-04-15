@@ -11,21 +11,6 @@
     margin: 0;
 }
 
-.MoodContainer {
-    width: 90vw;
-    margin-left: 5vw;
-    text-align: left;
-}
-
-.MoodSelect {
-    font-size: 3vh;
-    width: 25vh;
-}
-
-.MoodText {
-    font-size: 4vh;
-}
-
 .TodoSection {
     width: 90vw;
     margin-top: 2vh;
@@ -60,31 +45,6 @@
 
 .Todos {
     float: left;
-}
-
-.Excellent {
-    background-color: #008000;
-    color: white;
-}
-
-.Good {
-    background-color: #38b000;
-    color: white;
-}
-
-.Average {
-    background-color: #ccff33;
-    color: black;
-}
-
-.Bad {
-    background-color: #f79d65;
-    color: black
-}
-
-.Miserable {
-    background-color: #f27059;
-    color: black
 }
 
 @media screen and (max-width: 400px) {

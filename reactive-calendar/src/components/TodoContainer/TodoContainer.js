@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
+import classes from './TodoContainer.module.css';
+
 import todoService from '../../services/todoService.js';
 import calendarService from '../../services/calendarService.js';
-import moodService from '../../services/moodService.js';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import classes from './TodoContainer.module.css';
 
 import Alert from '../Alert/Alert';
 import Spinner from '../Spinner/Spinner';
 import Todo from './Todo/Todo';
 import TodoForm from './TodoForm/TodoForm';
 import TodoLabels from './TodoLabels/TodoLabels';
+import MoodSelect from './MoodSelect/MoodSelect';
 
 class TodoContainer extends Component {
     constructor(props) {
@@ -43,23 +45,10 @@ class TodoContainer extends Component {
                 currentDate: date
             });
         } else {
-            const rawMoodResponse = await moodService.getForDay(date);
-            const moodResponse = rawMoodResponse.data.response;
-            if (!moodResponse.successfull) {
-                this.setState({
-                    errorMessages: [...moodResponse.errorMessages],
-                    isLoading: false,
-                    currentDate: date
-                });
-            }
-
-            const mood = moodResponse.data.moodText;
-
             this.setState({
                 todos: [...todosResponse.data.todos],
                 isLoading: false,
-                currentDate: date,
-                currentMood: mood
+                currentDate: date
             });
         }
     }
@@ -133,12 +122,6 @@ class TodoContainer extends Component {
         this.setState({ showCreateForm: !this.state.showCreateForm });
     }
 
-    updateCurrentMood = (event) => {
-        const selectedMood = event.target.value;
-        moodService.updateMood(this.state.currentDate, selectedMood);
-        this.setState({ currentMood: selectedMood });
-    }
-
     deleteTodo = (todoId) => {
         const todosCopy = this.state.todos.slice();
         const todoIndex = todosCopy.findIndex(todo => todo.id === todoId);
@@ -196,18 +179,7 @@ class TodoContainer extends Component {
         return (
             <div className={classes.TodoContainer}>
                 <span className={classes.CurrentDate}>Current date: {stringDate}</span>
-
-                <div className={classes.MoodContainer}>
-                    <span className={classes.MoodText}>How's your day going: </span>
-                    <select onChange={this.updateCurrentMood} defaultValue={this.state.currentMood} ref={this.moodSelect} className={classes.MoodSelect}>
-                        <option className={classes.Excellent}>Excellent</option>
-                        <option className={classes.Good}>Good</option>
-                        <option className={classes.Average}>Average</option>
-                        <option className={classes.Bad}>Bad</option>
-                        <option className={classes.Miserable}>Miserable</option>
-                    </select>
-                </div>
-
+                <MoodSelect currentDate={this.state.currentDate} />
                 <div className={classes.TodoSection}>
                     <span className={classes.TodoSectionText}>Todo section:</span>
                     <FontAwesomeIcon onClick={this.toggleCreateFormVisibility} icon={faPlusCircle} className={classes.Add} />

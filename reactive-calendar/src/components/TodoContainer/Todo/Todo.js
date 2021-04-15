@@ -122,6 +122,7 @@ class Todo extends Component {
                             <FontAwesomeIcon onClick={this.editTodoHandler} icon={faPen} className={classes.Icon} />
                             <FontAwesomeIcon onClick={this.deleteTodoHandler} icon={faTimes} className={classes.Icon} />
                         </div>
+                        <p className={classes.Title}>{this.state.title}</p>
                         {this.state.description}
                     </div>
                 );
