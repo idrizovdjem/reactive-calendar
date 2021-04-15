@@ -6,27 +6,18 @@ import Alert from '../Alert/Alert';
 import Spinner from '../Spinner/Spinner';
 
 class Register extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            isLoading: false,
-            errorMessages: []
-        };
-
-        this.emailInput = React.createRef(null);
-        this.usernameInput = React.createRef(null);
-        this.passwordInput = React.createRef(null);
-        this.repeatPasswordInput = React.createRef(null);
+    state = {
+        isLoading: false,
+        errorMessages: []
     }
 
-    register = async (event) => {
+    onSubmit = (event) => {
         event.preventDefault();
 
-        const email = this.emailInput.current.value.trim();
-        const username = this.usernameInput.current.value.trim();
-        const password = this.passwordInput.current.value.trim();
-        const repeatPassword = this.repeatPasswordInput.current.value.trim();
+        const email = event.target.email.value.trim();
+        const username = event.target.username.value.trim();
+        const password = event.target.password.value.trim();
+        const repeatPassword = event.target.repeatPassword.value.trim();
 
         // * validations
         if (!email || email.length < 5) {
@@ -49,13 +40,13 @@ class Register extends Component {
             return;
         }
 
+        this.register({ email, username, password });
+    }
+
+    register = async (data) => {
         this.setState({ isLoading: true });
 
-        const result = await authService.register({
-            email,
-            username,
-            password
-        });
+        const result = await authService.register(data);
 
         if(result.successfull) {
             this.setState({ isLoading: false });
@@ -79,29 +70,49 @@ class Register extends Component {
             <div className={classes.RegisterContainer}>
                 {spinner}
                 <p className={classes.Slogan}>Register your reactive account</p>
-                <form>
+                <form onSubmit={this.onSubmit}>
                     {alerts}
                     <div className="form-group">
                         <label>Email address</label>
-                        <input type="email" className="form-control" placeholder="Enter your email" ref={this.emailInput} />
+                        <input 
+                            type="email"
+                            className="form-control"
+                            placeholder="Enter your email"
+                            name='email'
+                        />
                     </div>
 
                     <div className="form-group">
                         <label>Username</label>
-                        <input type="text" className="form-control" placeholder="Enter your username" ref={this.usernameInput} />
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            placeholder="Enter your username" 
+                            name='username' 
+                        />
                     </div>
 
                     <div className="form-group">
                         <label>Password</label>
-                        <input type="password" className="form-control" placeholder="Enter your password" ref={this.passwordInput} />
+                        <input 
+                            type="password"
+                            className="form-control"
+                            placeholder="Enter your password"
+                            name='password'
+                        />
                     </div>
 
                     <div className="form-group">
                         <label>Repeat password</label>
-                        <input type="password" className="form-control" placeholder="Repeat your password" ref={this.repeatPasswordInput} />
+                        <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Repeat your password"
+                            name='repeatPassword'
+                        />
                     </div>
 
-                    <button onClick={this.register} className="btn btn-primary w-100">Register</button>
+                    <button className="btn btn-primary w-100">Register</button>
                 </form>
             </div>
         );

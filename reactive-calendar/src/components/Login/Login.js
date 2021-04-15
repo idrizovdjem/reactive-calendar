@@ -6,23 +6,16 @@ import Alert from '../Alert/Alert';
 import Spinner from '../Spinner/Spinner';
 
 class Login extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            isLoading: false,
-            errorMessages: []
-        };
-
-        this.emailInput = React.createRef(null);
-        this.passwordInput = React.createRef(null);
+    state = {
+        isLoading: false,
+        errorMessages: []
     }
 
-    login = async (event) => {
+    onSubmit = async (event) => {
         event.preventDefault();
 
-        const email = this.emailInput.current.value.trim();
-        const password = this.passwordInput.current.value.trim();
+        const email = event.target.email.value;
+        const password = event.target.password.value;
 
         // * validations
         if(!email || email.length < 5) {
@@ -35,9 +28,13 @@ class Login extends Component {
             return;
         }
 
+        this.login({ email, password });
+    }
+
+    login = async (data) => {
         this.setState({ isLoading: true });
 
-        const result = await authService.login({ email, password });
+        const result = await authService.login(data);
 
         if (result.successfull) {
             this.setState({ isLoading: false });
@@ -54,26 +51,37 @@ class Login extends Component {
         const spinner = this.state.isLoading ? <Spinner /> : null;
 
         const alerts = [];
-        this.state.errorMessages.map((message, index) =>
-            alerts.push(<Alert alert='danger' message={message} key={index} />));
+        this.state.errorMessages.forEach((message, index) => {
+            alerts.push(<Alert alert='danger' message={message} key={index} />)
+        });
 
         return (
             <div className={classes.LoginContainer}>
                 {spinner}
                 <p className={classes.Slogan}>Log in to your reactive account</p>
-                <form>
+                <form onSubmit={this.onSubmit}>
                     {alerts}
                     <div className="form-group">
                         <label>Email address</label>
-                        <input type="email" className="form-control" placeholder="Enter your email" ref={this.emailInput} />
+                        <input 
+                            type="email"
+                            className="form-control"
+                            placeholder="Enter your email"
+                            name='email' 
+                        />
                     </div>
 
                     <div className="form-group">
                         <label>Password</label>
-                        <input type="password" className="form-control" placeholder="Enter your password" ref={this.passwordInput} />
+                        <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Enter your password"
+                            name='password'
+                        />
                     </div>
 
-                    <button onClick={this.login} className="btn btn-primary w-100">Log in</button>
+                    <button className="btn btn-primary w-100">Log in</button>
                 </form>
             </div>
         );
