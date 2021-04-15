@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import classes from './Todo.module.css';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare, faSquare, faTimes, faPen } from '@fortawesome/free-solid-svg-icons';
-import todoService from '../../../services/todoService.js';
+
+import todoService from '../../../../services/todoService.js';
 
 class Todo extends Component {
     constructor(props) {

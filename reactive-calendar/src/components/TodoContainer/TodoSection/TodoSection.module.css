@@ -1,0 +1,32 @@
+.TodoSection {
+    width: 90vw;
+    margin-top: 2vh;
+    margin-left: 5vw;
+    text-align: left;
+    user-select: none;
+}
+
+.TodoSectionText {
+    font-size: 5vh; 
+}
+
+.Add {
+    font-size: 4.5vh;
+    margin-left: 3vh;
+    color: gray;
+}
+
+.Add:hover {
+    color: black;
+    cursor: pointer;
+}
+
+.Form {
+    width: 90vw;
+    float: left;
+    margin-bottom: 2vh;
+}
+
+.Todos {
+    float: left;
+}
