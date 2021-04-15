@@ -7,9 +7,9 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import todoService from '../../../services/todoService.js';
 
 import Alert from '../../Alert/Alert';
-import TodoForm from '../TodoForm/TodoForm';
-import TodoList from '../TodoList/TodoList';
-import TodoLabels from '../TodoLabels/TodoLabels';
+import TodoForm from './TodoForm/TodoForm';
+import TodoList from './TodoList/TodoList';
+import TodoLabels from './TodoLabels/TodoLabels';
 
 class TodoSection extends Component {
     state = {
@@ -42,30 +42,6 @@ class TodoSection extends Component {
         if (!this.state.selectedLabel) {
             alert('Choose label');
             return;
-        }
-
-        // validate title
-        if (!title) {
-            alert('Title is required!');
-            return;
-        } else {
-            title = title.trim();
-            if (title.length < 1) {
-                alert('Title is required!');
-                return;
-            }
-        }
-
-        // validate description
-        if (!description) {
-            alert('Description is required!');
-            return;
-        } else {
-            description = description.trim();
-            if (description.length < 1) {
-                alert('Description is required!');
-                return;
-            }
         }
 
         this.setState({ isLoading: true });
@@ -123,23 +99,21 @@ class TodoSection extends Component {
             return alerts;
         }
 
-        let createForm = null;
-        if (this.state.showCreateForm) {
-            createForm = (
-                <div className={classes.Form}>
-                    <TodoForm create={this.createTodoHandler} />
-                    <TodoLabels change={(label) => this.setState({ selectedLabel: label })} />
-                </div>
-            );
-        }
-
         return (
             <div className={classes.TodoSection}>
                 <span className={classes.TodoSectionText}>Todo section:</span>
                 <FontAwesomeIcon onClick={() => this.setState({ showCreateForm: !this.state.showCreateForm })} icon={faPlusCircle} className={classes.Add} />
 
-                {createForm}
-                <TodoList todos={this.state.todos} deleteTodo={this.deleteTodo}/>
+                {
+                    this.state.showCreateForm ?
+                    (
+                        <div className={classes.Form}>
+                            <TodoForm create={this.createTodoHandler} />
+                            <TodoLabels change={(label) => this.setState({ selectedLabel: label })} />
+                        </div>
+                    ) : null
+                }
+                <TodoList todos={this.state.todos} deleteTodo={this.deleteTodo} />
             </div>
         );
     }

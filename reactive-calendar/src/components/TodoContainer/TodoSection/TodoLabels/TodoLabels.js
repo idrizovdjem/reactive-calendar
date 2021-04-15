@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import labelsService from '../../../services/labelService.js';
+import labelsService from '../../../../services/labelService.js';
 import classes from './TodoLabels.module.css';
 
 import Label from './Label/Label';
-import Alert from '../../Alert/Alert';
-import Spinner from '../../Spinner/Spinner';
+import Alert from '../../../Alert/Alert';
+import Spinner from '../../../Spinner/Spinner';
 
 class TodoLabels extends Component {
     state = {

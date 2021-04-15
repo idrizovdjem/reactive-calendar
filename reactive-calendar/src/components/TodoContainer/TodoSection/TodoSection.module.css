@@ -24,9 +24,6 @@
 .Form {
     width: 90vw;
     float: left;
+    height: 49vh;
     margin-bottom: 2vh;
-}
-
-.Todos {
-    float: left;
 }
