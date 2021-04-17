@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
 import classes from './TodoSection.module.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,71 +11,55 @@ import TodoForm from './TodoForm/TodoForm';
 import TodoList from './TodoList/TodoList';
 import TodoLabels from './TodoLabels/TodoLabels';
 
-class TodoSection extends Component {
-    state = {
-        isLoading: false,
-        errorMessages: [],
-        showCreateForm: false,
-        selectedLabel: null,
-        todos: []
-    }
+const TodoSection = (props) => {
+    const [errorMessages, setErrorMessages] = useState([]);
+    const [showCreateForm, setShowCreateForm] = useState(false);
+    const [selectedLabel, setSelectedLabel] = useState(null);
+    const [todos, setTodos] = useState([]);
 
-    async componentDidMount() {
-        this.setState({ isLoading: true });
-        const todosResponse = await todoService.getDailyTodos(this.props.date);
+    useEffect(() => {
+        async function fetchTodos() {
+            const todosResponse = await todoService.getDailyTodos(props.date);
 
-        if (!todosResponse.successfull) {
-            this.setState({
-                errorMessages: [...todosResponse.errorMessages],
-                isLoading: false
-            });
-        } else {
-            this.setState({
-                todos: [...todosResponse.data.todos],
-                isLoading: false
-            });
+            if (!todosResponse.successfull) {
+                setErrorMessages(todosResponse.errorMessages);
+            } else {
+                setTodos(todosResponse.data.todos);
+            }
         }
-    }
 
-    createTodoHandler = async (title, description) => {
-        // validate label
-        if (!this.state.selectedLabel) {
+        fetchTodos();
+    }, [props.date]);
+
+    const createTodoHandler = async (title, description) => {
+        if (selectedLabel === null) {
             alert('Choose label');
             return;
         }
 
-        this.setState({ isLoading: true });
-
         const createTodoResponse = await todoService.create({
             title,
             description,
-            labelText: this.state.selectedLabel.text,
-            date: this.props.date
+            labelText: selectedLabel.text,
+            date: props.date
         });
 
         const todoResponse = createTodoResponse.data.response;
 
         if (!todoResponse.successfull) {
-            this.setState({
-                errorMessages: [...todoResponse.errorMessages],
-                isLoading: false,
-                selectedLabel: null,
-                showCreateForm: false
-            });
+            setErrorMessages(todoResponse.errorMessages);
         } else {
             const createdTodo = todoResponse.data.todo;
-            createdTodo.label = this.state.selectedLabel;
-            this.setState({
-                isLoading: false,
-                todos: [...this.state.todos, createdTodo],
-                selectedLabel: null,
-                showCreateForm: false
-            });
+            createdTodo.label = selectedLabel;
+            setTodos((oldTodos) => [...oldTodos, createdTodo]);
         }
+
+        setSelectedLabel(null);
+        setShowCreateForm(false);
     }
 
-    deleteTodo = (todoId) => {
-        const todosCopy = this.state.todos.slice();
+    const deleteTodo = (todoId) => {
+        const todosCopy = todos.slice();
         const todoIndex = todosCopy.findIndex(todo => todo.id === todoId);
 
         if (todoIndex === -1) {
@@ -85,38 +69,40 @@ class TodoSection extends Component {
         todoService.deleteTodo(todoId);
 
         todosCopy.splice(todoIndex, 1);
-        this.setState({ todos: [...todosCopy] });
+        setTodos(todosCopy);
+    }
+  
+    const toggleShowCreateForm = () => {
+        setShowCreateForm((oldState) => !oldState);
     }
 
-    render() {
-        // display alerts
-        const alerts = [];
-        this.state.errorMessages.forEach((message, index) => {
-            alerts.push(<Alert alert='danger' message={message} key={index} />);
+    const changeLabelHandler = (label) => {
+        setSelectedLabel(label);
+    }
+
+    if(errorMessages.length > 0) {
+        return errorMessages.map((message, index) => {
+            return <Alert key={index} alert='danger' message={message} />
         });
+    }
 
-        if (alerts.length > 0) {
-            return alerts;
-        }
+    return (
+        <div className={classes.TodoSection}>
+            <span className={classes.TodoSectionText}>Todo section:</span>
+            <FontAwesomeIcon onClick={toggleShowCreateForm} icon={faPlusCircle} className={classes.Add} />
 
-        return (
-            <div className={classes.TodoSection}>
-                <span className={classes.TodoSectionText}>Todo section:</span>
-                <FontAwesomeIcon onClick={() => this.setState({ showCreateForm: !this.state.showCreateForm })} icon={faPlusCircle} className={classes.Add} />
-
-                {
-                    this.state.showCreateForm ?
+            {
+                showCreateForm ?
                     (
                         <div className={classes.Form}>
-                            <TodoForm create={this.createTodoHandler} />
-                            <TodoLabels change={(label) => this.setState({ selectedLabel: label })} />
+                            <TodoForm create={createTodoHandler} />
+                            <TodoLabels change={changeLabelHandler} />
                         </div>
                     ) : null
-                }
-                <TodoList todos={this.state.todos} deleteTodo={this.deleteTodo} />
-            </div>
-        );
-    }
+            }
+            <TodoList todos={todos} deleteTodo={deleteTodo} />
+        </div>
+    );
 }
 
 export default TodoSection;

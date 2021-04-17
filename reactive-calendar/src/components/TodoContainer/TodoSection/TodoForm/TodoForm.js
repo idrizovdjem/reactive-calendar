@@ -1,15 +1,7 @@
-import React, { Component } from 'react';
 import classes from './TodoForm.module.css';
 
-class TodoForm extends Component {
-    constructor(props) {
-        super(props);
-
-        this.titleInput = React.createRef(null);
-        this.descriptionTextArea = React.createRef(null);
-    }
-    
-    onSubmit = (event) => {
+const TodoForm = (props) => {
+    const onSubmit = (event) => {
         event.preventDefault();
         let title = event.target.title.value;
         let description = event.target.description.value;
@@ -38,29 +30,27 @@ class TodoForm extends Component {
             }
         }
 
-        this.props.create(title, description);
+        props.create(title, description);
     }
 
-    render() {
-        return (
-            <form onSubmit={this.onSubmit} className={classes.TodoForm}>
-                <label htmlFor='title' className={classes.TitleLabel}>Title</label>
-                <input 
-                    type='text' 
-                    placeholder='Something very important' 
-                    id='title' 
-                    className={classes.TitleInput} 
-                    name='title' 
-                />
-                <textarea 
-                    className={classes.Textarea} 
-                    placeholder='Describe the very important thing' 
-                    name='description' 
-                />
-                <button className={classes.CreateButton}>Create</button>
-            </form>
-        );
-    }
+    return (
+        <form onSubmit={onSubmit} className={classes.TodoForm}>
+            <label htmlFor='title' className={classes.TitleLabel}>Title</label>
+            <input 
+                type='text' 
+                placeholder='Something very important' 
+                id='title' 
+                className={classes.TitleInput} 
+                name='title' 
+            />
+            <textarea 
+                className={classes.Textarea} 
+                placeholder='Describe the very important thing' 
+                name='description' 
+            />
+            <button className={classes.CreateButton}>Create</button>
+        </form>
+    );
 }
 
 export default TodoForm;

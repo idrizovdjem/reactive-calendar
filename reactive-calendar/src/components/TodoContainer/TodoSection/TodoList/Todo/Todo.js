@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import classes from './Todo.module.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,144 +6,125 @@ import { faCheckSquare, faSquare, faTimes, faPen } from '@fortawesome/free-solid
 
 import todoService from '../../../../../services/todoService.js';
 
-class Todo extends Component {
-    constructor(props) {
-        super(props);
+const Todo = (props) => {
+    const [title, setTitle] = useState(props.todo.title);
+    const [description, setDescription] = useState(props.todo.description);
+    const [isChecked, setIsChecked] = useState(props.todo.isChecked);
+    const [showDescription, setShowDescription] = useState(false);
+    const [isEditable, setIsEditable] = useState(false);
 
-        this.state = {
-            title: this.props.todo.title,
-            description: this.props.todo.description,
-            isChecked: this.props.todo.isChecked,
-            showDescription: false,
-            isEditable: false
-        };
-
-        this.titleInput = React.createRef();
-        this.descriptionTextArea = React.createRef();
-    }
-
-    changeCheckedHandler = async (event) => {
+    const changeCheckedHandler = async (event) => {
         event.stopPropagation();
-        const newCheckState = !this.state.isChecked;
-        const id = this.props.todo.id;
-        this.setState({ isChecked: newCheckState });
-        await todoService.changeTodoCheckedState(id, newCheckState);
+        const id = props.todo.id;
+        setIsChecked((oldState) => !oldState);
+        await todoService.changeTodoCheckedState(id, isChecked);
     }
 
-    toggleDescriptionHandler = () => {
-        this.setState({ showDescription: !this.state.showDescription });
+    const toggleDescriptionHandler = () => {
+        setShowDescription((oldState) => !oldState);
     }
 
-    editTodoHandler = (event) => {
+    const editTodoHandler = (event) => {
         event.stopPropagation();
-        if(this.state.isEditable) {
-            this.setState({ showDescription: false, isEditable: false });
+        if (isEditable) {
+            setShowDescription(false);
+            setIsEditable(false);
         } else {
-            this.setState({ showDescription: true, isEditable: true });
+            setShowDescription(true);
+            setIsEditable(true);
         }
     }
 
-    saveChangesHandler = () => {
-        let title = this.titleInput.current.value;
-        let description = this.descriptionTextArea.current.value;
+    const saveChangesHandler = (event) => {
+        event.preventDefault();
+        let title = event.target.title.value;
+        let description = event.target.description.value;
 
-        // validate title
         if (!title) {
             alert('Title is required!');
             return;
-        } else {
-            title = title.trim();
-            if (title.length < 1) {
-                alert('Title is required!');
-                return;
-            }
         }
 
-        // validate description
         if (!description) {
             alert('Description is required!');
             return;
-        } else {
-            description = description.trim();
-            if (description.length < 1) {
-                alert('Description is required!');
-                return;
-            }
         }
-        
-        this.setState({
-            title,
-            description
-        });
 
-        todoService.updateTodo(this.props.todo.id, title, description);
+        setTitle(title);
+        setDescription(description);
 
-        this.setState({ showDescription: false, isEditable: false });
+        todoService.updateTodo(props.todo.id, title, description);
+
+        setShowDescription(false);
+        setIsEditable(false);
     }
 
-    cancelHandler = () => {
-        this.setState({ showDescription: false, isEditable: false });
+    const cancelHandler = (event) => {
+        event.preventDefault();
+        setShowDescription(false);
+        setIsEditable(false);
     }
 
-    deleteTodoHandler = (event) => {
+    const deleteTodoHandler = (event) => {
         event.stopPropagation();
-        this.props.onDelete(this.props.todo.id);
+        props.onDelete(props.todo.id);
     }
 
-    render() {
-        const nextCheckIcon = this.state.isChecked ? faCheckSquare : faSquare;
+    const nextCheckIcon = isChecked ? faCheckSquare : faSquare;
+    let descriptionElement = null;
 
-        let descriptionElement = null;
-        
-
-        let todoElement = null;
-        if (this.state.isEditable) {
-            if (this.state.showDescription) {
-                descriptionElement = (
-                    <textarea defaultValue={this.state.description} ref={this.descriptionTextArea} className={classes.DescriptionTextArea} rows='5'>
-                    </textarea>
-                );
-            }
-
-            todoElement = (
-                <div>
-                    <div style={this.props.todo.label} className={classes.Todo}>
-                        <input ref={this.titleInput} className={classes.EditInput} type='text' defaultValue={this.state.title} />
-                    </div>
-                    <div className={classes.EditButtonsContainer}>
-                        <button onClick={this.saveChangesHandler} className={`${classes.EditButton} ${classes.SaveChanges}`}>Save changes</button>
-                        <button onClick={this.cancelHandler} className={`${classes.EditButton} ${classes.Cancel}`}>Cancel</button>
-                    </div>
-                    {descriptionElement}
-                </div>);
-        } else {
-            if (this.state.showDescription) {
-                descriptionElement = (
-                    <div className={classes.TodoDescription}>
-                        <div className={classes.ButtonsContainer}>
-                            <FontAwesomeIcon onClick={this.editTodoHandler} icon={faPen} className={classes.Icon} />
-                            <FontAwesomeIcon onClick={this.deleteTodoHandler} icon={faTimes} className={classes.Icon} />
-                        </div>
-                        <p className={classes.Title}>{this.state.title}</p>
-                        {this.state.description}
-                    </div>
-                );
-            }
-
-            todoElement = (
-                <div>
-                    <div onClick={this.toggleDescriptionHandler} style={this.props.todo.label} className={classes.Todo}>
-                        <div style={{ color: this.props.todo.label.color }} className={classes.TodoText}>
-                            {this.state.title}
-                        </div>
-                        <FontAwesomeIcon onClick={this.changeCheckedHandler} icon={nextCheckIcon} className={classes.CheckIcon} />
-                    </div>
-                    {descriptionElement}
-                </div>);
+    let todoElement = null;
+    if (isEditable) {
+        if (showDescription) {
+            descriptionElement = (
+                <textarea 
+                    name='description'
+                    defaultValue={description}
+                    className={classes.DescriptionTextArea} 
+                    rows='5'
+                />
+            );
         }
 
-        return todoElement;
+        todoElement = (
+            <form onSubmit={saveChangesHandler}>
+                <div style={props.todo.label} className={classes.Todo}>
+                    <input name='title' className={classes.EditInput} type='text' defaultValue={title} />
+                </div>
+                <div className={classes.EditButtonsContainer}>
+                    <button className={`${classes.EditButton} ${classes.SaveChanges}`}>Save changes</button
+                    >
+                    <button onClick={cancelHandler} className={`${classes.EditButton} ${classes.Cancel}`}>Cancel</button>
+                </div>
+                {descriptionElement}
+            </form>);
+    } else {
+        if (showDescription) {
+            descriptionElement = (
+                <div className={classes.TodoDescription}>
+                    <div className={classes.ButtonsContainer}>
+                        <FontAwesomeIcon onClick={editTodoHandler} icon={faPen} className={classes.Icon} />
+                        <FontAwesomeIcon onClick={deleteTodoHandler} icon={faTimes} className={classes.Icon} />
+                    </div>
+                    <p className={classes.Title}>{title}</p>
+                    {description}
+                </div>
+            );
+        }
+
+        todoElement = (
+            <div>
+                <div onClick={toggleDescriptionHandler} style={props.todo.label} className={classes.Todo}>
+                    <div style={{ color: props.todo.label.color }} className={classes.TodoText}>
+                        {title}
+                    </div>
+                    <FontAwesomeIcon onClick={changeCheckedHandler} icon={nextCheckIcon} className={classes.CheckIcon} />
+                </div>
+                {descriptionElement}
+            </div>);
     }
+
+    return todoElement;
 }
 
 export default Todo;

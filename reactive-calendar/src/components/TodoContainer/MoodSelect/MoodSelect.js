@@ -1,59 +1,57 @@
-import React, { Component } from "react";
+import { useEffect, useState } from 'react';
 import classes from "./MoodSelect.module.css";
 
 import moodService from '../../../services/moodService.js';
 
-class MoodSelect extends Component {
-	state = {
-		currentMood: null
-	}
+import Alert from '../../Shared/Alert/Alert';
 
-	async componentDidMount() {
-		if(this.props.currentDate === null) {
-			return;
+const MoodSelect = (props) => {
+	const [errorMessages, setErrorMessages] = useState([]);
+	const [mood, setMood] = useState(null);
+
+	useEffect(() => {
+		async function fetchMood() {
+			const rawMoodResponse = await moodService.getForDay(props.date);
+			const moodResponse = rawMoodResponse.data.response;
+			if (!moodResponse.successfull) {
+				setErrorMessages(moodResponse.errorMessages);
+			}
+
+			const mood = moodResponse.data.moodText;
+			setMood(mood);
 		}
 
-		const rawMoodResponse = await moodService.getForDay(this.props.currentDate);
-		const moodResponse = rawMoodResponse.data.response;
-		if (!moodResponse.successfull) {
-			this.setState({
-				errorMessages: [...moodResponse.errorMessages],
-				isLoading: false,
-			});
-		}
+		fetchMood();
+	}, [props.date]);
 
-		const mood = moodResponse.data.moodText;
-		this.setState({ currentMood: mood });
-	}
-
-	updateMood = (event) => {
+	const updateMood = (event) => {
 		const selectedMood = event.target.value;
-		moodService.updateMood(this.props.currentDate, selectedMood);
-		this.setState({ currentMood: selectedMood });
+		moodService.updateMood(props.date, selectedMood);
+		setMood(selectedMood);
 	};
 
-	render() {
-		if(this.state.currentMood === null) {
-			return null;
-		}
-
-		return (
-			<div className={classes.MoodContainer}>
-				<span className={classes.MoodText}>How's your day going: </span>
-				<select
-					onChange={this.updateMood}
-					defaultValue={this.state.currentMood}
-					className={classes.MoodSelect}
-				>
-					<option className={classes.Excellent}>Excellent</option>
-					<option className={classes.Good}>Good</option>
-					<option className={classes.Average}>Average</option>
-					<option className={classes.Bad}>Bad</option>
-					<option className={classes.Miserable}>Miserable</option>
-				</select>
-			</div>
-		);
+	if(errorMessages.length > 0) {
+		return errorMessages.map((message, index) => {
+			return <Alert key={index} alert='danger' message={message} />
+		});
 	}
+
+	return (
+		<div className={classes.MoodContainer}>
+			<span className={classes.MoodText}>How's your day going: </span>
+			<select
+				onChange={updateMood}
+				defaultValue={mood}
+				className={classes.MoodSelect}
+			>
+				<option className={classes.Excellent}>Excellent</option>
+				<option className={classes.Good}>Good</option>
+				<option className={classes.Average}>Average</option>
+				<option className={classes.Bad}>Bad</option>
+				<option className={classes.Miserable}>Miserable</option>
+			</select>
+		</div>
+	);
 }
 
 export default MoodSelect;
