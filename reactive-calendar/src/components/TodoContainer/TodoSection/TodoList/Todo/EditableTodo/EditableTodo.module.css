@@ -50,20 +50,20 @@
     margin-right: 3vh;
 }
 
+.DescriptionTextArea {
+    width: 85vw;
+    background-color: lightgray;
+    font-size: 4vh;
+    padding: 1vh;
+    border-radius: 5px;
+}
+
 .EditInput {
     float: left;
     overflow-x: hidden;
     width: 85vw;
     height: 8vh;
     font-size: 5vh;
-    border-radius: 5px;
-}
-
-.DescriptionTextArea {
-    width: 85vw;
-    background-color: lightgray;
-    font-size: 4vh;
-    padding: 1vh;
     border-radius: 5px;
 }
 
