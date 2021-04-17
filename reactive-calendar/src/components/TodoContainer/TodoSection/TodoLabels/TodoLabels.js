@@ -3,8 +3,8 @@ import labelsService from '../../../../services/labelService.js';
 import classes from './TodoLabels.module.css';
 
 import Label from './Label/Label';
-import Alert from '../../../Alert/Alert';
-import Spinner from '../../../Spinner/Spinner';
+import Alert from '../../../Shared/Alert/Alert';
+import Spinner from '../../../Shared/Spinner/Spinner';
 
 class TodoLabels extends Component {
     state = {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {  withRouter } from 'react-router-dom';
-import authService from '../../services/authService.js';
-
 import classes from './Navigation.module.css';
+import {  withRouter } from 'react-router-dom';
+
+import authService from '../../services/authService.js';
 
 class Navigation extends Component {
     state = {

@@ -6,7 +6,7 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 import todoService from '../../../services/todoService.js';
 
-import Alert from '../../Alert/Alert';
+import Alert from '../../Shared/Alert/Alert';
 import TodoForm from './TodoForm/TodoForm';
 import TodoList from './TodoList/TodoList';
 import TodoLabels from './TodoLabels/TodoLabels';

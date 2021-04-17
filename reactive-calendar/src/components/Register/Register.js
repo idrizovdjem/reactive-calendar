@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import authService from '../../services/authService.js';
 import classes from './Register.module.css';
 
-import Alert from '../Alert/Alert';
-import Spinner from '../Spinner/Spinner';
+import Alert from '../Shared/Alert/Alert';
+import Spinner from '../Shared/Spinner/Spinner';
 
 class Register extends Component {
     state = {

@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import classes from "./Calendar.module.css";
+
 import calendarService from "../../services/calendarService.js";
 import moodService from "../../services/moodService.js";
 import todoService from "../../services/todoService.js";
 
-import SideBar from "./SideBar/SideBar";
+import SideBar from './SideBar/SideBar';
 import CalendarHeaderRow from './CalendarHeaderRow/CalendarHeaderRow';
-import CalendarRow from "./CalendarRow/CalendarRow";
-import Spinner from "../Spinner/Spinner";
-import Alert from "../Alert/Alert";
+import CalendarRow from './CalendarRow/CalendarRow';
+import Alert from '../Shared/Alert/Alert';
+import Spinner from '../Shared/Spinner/Spinner';
 
 class Calendar extends Component {
 	state = {

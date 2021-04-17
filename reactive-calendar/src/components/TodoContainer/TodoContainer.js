@@ -3,7 +3,7 @@ import classes from './TodoContainer.module.css';
 
 import calendarService from '../../services/calendarService.js';
 
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../Shared/Spinner/Spinner';
 import TodoSection from './TodoSection/TodoSection';
 import MoodSelect from './MoodSelect/MoodSelect';
 

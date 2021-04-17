@@ -5,7 +5,7 @@ import calendarService from '../../../services/calendarService.js';
 import moodService from '../../../services/moodService.js';
 
 import WeekRow from './WeekRow/WeekRow';
-import Spinner from '../../Spinner/Spinner';
+import Spinner from '../../Shared/Spinner/Spinner';
 
 class MonthBox extends Component {
     state = {

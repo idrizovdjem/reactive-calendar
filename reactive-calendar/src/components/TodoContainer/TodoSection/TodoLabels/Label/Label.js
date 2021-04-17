@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import classes from './Label.module.css';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import classes from './Label.module.css';
 
 class Label extends Component {
     state = {
