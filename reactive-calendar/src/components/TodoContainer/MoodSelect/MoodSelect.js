@@ -36,6 +36,10 @@ const MoodSelect = (props) => {
 		});
 	}
 
+	if(mood === null) {
+		return null;
+	}
+
 	return (
 		<div className={classes.MoodContainer}>
 			<span className={classes.MoodText}>How's your day going: </span>

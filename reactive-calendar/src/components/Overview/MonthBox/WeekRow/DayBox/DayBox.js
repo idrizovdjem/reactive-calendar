@@ -1,49 +1,42 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import classes from './DayBox.module.css';
 
 import calendarService from '../../../../../services/calendarService.js';
 
-class DayBox extends Component {
-    state = {
-        showPopup: false
+const DayBox = (props) => {
+    const [showPopup, setShowPopup] = useState(false);
+
+    const hoverHandler = () => {
+        setShowPopup(true);
     }
 
-    hoverHandler = () => {
-        this.setState({ showPopup: true });
+    const hoverLeaveHandler = () => {
+        setShowPopup(false);
     }
 
-    hoverLeaveHandler = () => {
-        this.setState({ showPopup: false });
+    const redirect = () => {
+        const date = props.date;
+        props.redirect(props.history, `/Todo/${date}`);
     }
 
-    redirect = () => {
-        const date = this.props.date;
-        this.props.redirect(this.props.history, `/Todo/${date}`);
-    }
-
-    render() {
-        const moodColor = this.props.moodColor;
-        let popup = null;
-        if (this.state.showPopup) {
-            const stringDate = calendarService.convertFromNumber(this.props.date);
-
-            popup = (
-                <div className={classes.Popover}>{stringDate}</div>
-            );
-        }
-
-        return (
-            <div
-                onMouseOver={this.hoverHandler}
-                onMouseLeave={this.hoverLeaveHandler}
-                onClick={this.redirect}
-                style={{ backgroundColor: moodColor }}
-                className={classes.DayBox}>
-                {popup}
-            </div>
-
+    let popup = null;
+    if (showPopup) {
+        const stringDate = calendarService.convertFromNumber(props.date);
+        popup = (
+            <div className={classes.Popover}>{stringDate}</div>
         );
     }
+
+    return (
+        <div
+            onMouseOver={hoverHandler}
+            onMouseLeave={hoverLeaveHandler}
+            onClick={redirect}
+            style={{ backgroundColor: props.moodColor }}
+            className={classes.DayBox}>
+            {popup}
+        </div>
+    );
 }
 
 export default DayBox;

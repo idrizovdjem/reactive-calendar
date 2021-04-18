@@ -1,22 +1,25 @@
-import React, { Component } from 'react';
 import classes from './MonthRow.module.css';
 
 import MonthBox from '../MonthBox/MonthBox';
 
-class MonthRow extends Component {
-
-    render() {
-        const monthBoxes = [];
-        for(let i = this.props.from; i <= this.props.to; i++) {
-            monthBoxes.push(<MonthBox {...this.props} year={this.props.year} key={i} month={i} />)
-        }
-
-        return (
-            <div className={classes.MonthRow}>
-                {monthBoxes}
-            </div>
+const MonthRow = (props) => {
+    const monthBoxes = [];
+    for (let i = props.from; i <= props.to; i++) {
+        monthBoxes.push(
+            <MonthBox 
+                {...props} 
+                year={props.year} 
+                key={i} 
+                month={i}
+            />
         );
     }
+
+    return (
+        <div className={classes.MonthRow}>
+            {monthBoxes}
+        </div>
+    );
 }
 
 export default MonthRow;
