@@ -1,17 +1,15 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import authService from '../../services/authService.js';
 import classes from './Register.module.css';
 
 import Alert from '../Shared/Alert/Alert';
 import Spinner from '../Shared/Spinner/Spinner';
 
-class Register extends Component {
-    state = {
-        isLoading: false,
-        errorMessages: []
-    }
+const Register = (props) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessages, setErrorMessages] = useState([]);
 
-    onSubmit = (event) => {
+    const onSubmit = (event) => {
         event.preventDefault();
 
         const email = event.target.email.value.trim();
@@ -40,83 +38,87 @@ class Register extends Component {
             return;
         }
 
-        this.register({ email, username, password });
+        register({ email, username, password });
     }
 
-    register = async (data) => {
-        this.setState({ isLoading: true });
+    const register = async (data) => {
+        setIsLoading(true);
 
         const result = await authService.register(data);
 
-        if(result.successfull) {
-            this.setState({ isLoading: false });
-            this.props.redirect(this.props.history, '/Calendar', true);
+        if (result.successfull) {
+            props.redirect(props.history, '/Calendar', true);
         } else {
-            this.setState({
-                isLoading: false,
-                errorMessages: [...result.errorMessages]
-            });
+            setErrorMessages(result.errorMessages);
         }
+
+        setIsLoading(false);
     }
 
-    render() {
-        const spinner = this.state.isLoading ? <Spinner /> : null;
-
-        const alerts = [];
-        this.state.errorMessages.map((message, index) =>
-            alerts.push(<Alert alert='danger' message={message} key={index} />));
-
-        return (
-            <div className={classes.RegisterContainer}>
-                {spinner}
-                <p className={classes.Slogan}>Register your reactive account</p>
-                <form onSubmit={this.onSubmit}>
-                    {alerts}
-                    <div className="form-group">
-                        <label>Email address</label>
-                        <input 
-                            type="email"
-                            className="form-control"
-                            placeholder="Enter your email"
-                            name='email'
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Username</label>
-                        <input 
-                            type="text" 
-                            className="form-control" 
-                            placeholder="Enter your username" 
-                            name='username' 
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Password</label>
-                        <input 
-                            type="password"
-                            className="form-control"
-                            placeholder="Enter your password"
-                            name='password'
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Repeat password</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            placeholder="Repeat your password"
-                            name='repeatPassword'
-                        />
-                    </div>
-
-                    <button className="btn btn-primary w-100">Register</button>
-                </form>
-            </div>
-        );
+    if (isLoading) {
+        return <Spinner />
     }
+
+    const alerts = [];
+    if (errorMessages.length > 0) {
+        alerts.push(errorMessages.forEach((message, index) => {
+            return <Alert alert='danger' message={message} key={index} />;
+        }));
+    }
+
+    return (
+        <div className={classes.RegisterContainer}>
+            <p className={classes.Slogan}>Register your reactive account</p>
+            <form onSubmit={onSubmit}>
+                {alerts}
+                <div className="form-group">
+                    <label htmlFor='email'>Email address</label>
+                    <input
+                        id='email'
+                        type="email"
+                        className="form-control"
+                        placeholder="Enter your email"
+                        name='email'
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor='username'>Username</label>
+                    <input
+                        id='username'
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter your username"
+                        name='username'
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor='password'>Password</label>
+                    <input
+                        id='password'
+                        type="password"
+                        className="form-control"
+                        placeholder="Enter your password"
+                        name='password'
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor='repeatPassword'>Repeat password</label>
+                    <input
+                        id='repeatPassword'
+                        type="password"
+                        className="form-control"
+                        placeholder="Repeat your password"
+                        name='repeatPassword'
+                    />
+                </div>
+
+                <button className="btn btn-primary w-100">Register</button>
+            </form>
+        </div>
+    );
 }
 
 export default Register;

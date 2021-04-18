@@ -6,12 +6,14 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 import todoService from '../../../services/todoService.js';
 
+import Spinner from '../../Shared/Spinner/Spinner';
 import Alert from '../../Shared/Alert/Alert';
 import TodoForm from './TodoForm/TodoForm';
 import TodoList from './TodoList/TodoList';
 import TodoLabels from './TodoLabels/TodoLabels';
 
 const TodoSection = (props) => {
+    const [isLoading, setIsLoading] = useState(false);
     const [errorMessages, setErrorMessages] = useState([]);
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [selectedLabel, setSelectedLabel] = useState(null);
@@ -19,6 +21,7 @@ const TodoSection = (props) => {
 
     useEffect(() => {
         async function fetchTodos() {
+            setIsLoading(true);
             const todosResponse = await todoService.getDailyTodos(props.date);
 
             if (!todosResponse.successfull) {
@@ -26,6 +29,8 @@ const TodoSection = (props) => {
             } else {
                 setTodos(todosResponse.data.todos);
             }
+
+            setIsLoading(false);
         }
 
         fetchTodos();
@@ -36,6 +41,8 @@ const TodoSection = (props) => {
             alert('Choose label');
             return;
         }
+
+        setIsLoading(true);
 
         const createTodoResponse = await todoService.create({
             title,
@@ -54,6 +61,7 @@ const TodoSection = (props) => {
             setTodos((oldTodos) => [...oldTodos, createdTodo]);
         }
 
+        setIsLoading(false);
         setSelectedLabel(null);
         setShowCreateForm(false);
     }
@@ -78,6 +86,10 @@ const TodoSection = (props) => {
 
     const changeLabelHandler = (label) => {
         setSelectedLabel(label);
+    }
+
+    if(isLoading) {
+        return <Spinner />
     }
 
     if(errorMessages.length > 0) {
