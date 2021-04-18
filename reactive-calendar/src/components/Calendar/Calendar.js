@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { useState, useEffect } from 'react';
 import classes from "./Calendar.module.css";
 
 import calendarService from "../../services/calendarService.js";
@@ -11,141 +11,127 @@ import CalendarRow from './CalendarRow/CalendarRow';
 import Alert from '../Shared/Alert/Alert';
 import Spinner from '../Shared/Spinner/Spinner';
 
-class Calendar extends Component {
-	state = {
-		isLoading: false,
-		errorMessages: [],
-		days: [],
-		date: {},
-	};
+const Calendar = (props) => {
+	const [isLoading, setIsLoading] = useState(false);
+	const [errorMessages, setErrorMessages] = useState([]);
+	const [days, setDays] = useState([]);
+	const [date, setDate] = useState({});
 
-	componentDidMount() {
+	useEffect(() => {
 		// * get current date
 		// * get days for the calendar
 		// * get todos for the days
 
 		const currentDate = calendarService.getCurrentDate();
-		this.setState({ date: currentDate }, async () => {
-			await this.updateCalendar();
-		});	
-	}
+		setDate(currentDate);
+	}, [props]);
 
-	updateCalendar = async () => {
-		this.setState({ isLoading: true });
-		const { year, month } = this.state.date;
+	useEffect(() => {
+		const updateCalendar = async () => {
+			if(Object.keys(date).length === 0) {
+				return;
+			}
 
-		const currentDays = calendarService.getCalendarDays(year, month);
+			setIsLoading(true);
+			const { year, month } = date;
 
-		const startDate = currentDays[0].date;
-		const endDate = currentDays[currentDays.length - 1].date;
-		
-		const todosResponse = await todoService.getTodosForDates(
-			startDate,
-			endDate
-		);
-		if (!todosResponse.successfull) {
-			this.setState({
-				isLoading: false,
-				errorMessages: [...todosResponse.errorMessages],
+			const currentDays = calendarService.getCalendarDays(year, month);
+	
+			const startDate = currentDays[0].date;
+			const endDate = currentDays[currentDays.length - 1].date;
+	
+			const todosResponse = await todoService.getTodosForDates(
+				startDate,
+				endDate
+			);
+			if (!todosResponse.successfull) {
+				setIsLoading(false);
+				setErrorMessages(todosResponse.errorMessages);
+				return;
+			}
+	
+			const dateTodos = todosResponse.data.todos;
+			dateTodos.forEach((todo) => {
+				const dayArr = currentDays.find((day) => day.date === todo.date);
+	
+				if (dayArr.todos.length < 3) {
+					dayArr.todos.push(todo);
+				}
 			});
-			return;
+	
+			// update moods
+			const rawDayMoodsResponse = await moodService.getForRange(
+				startDate,
+				endDate
+			);
+			const dayMoodsResponse = rawDayMoodsResponse.data.response;
+			const dayMoods = dayMoodsResponse.data.dateMoods;
+			dayMoods.forEach((dateMood) => {
+				const currentDate = currentDays.find((day) => day.date === dateMood.date);
+				currentDate.moodColor = moodService.getMoodColor(dateMood.mood);
+			});
+	
+			setIsLoading(false);
+			setDays(currentDays);
 		}
 
-		const dateTodos = todosResponse.data.todos;
-		dateTodos.forEach((todo) => {
-			const day = currentDays.find((day) => day.date === todo.date);
-			
-			if (day.todos.length < 3) {
-				day.todos.push(todo);
-			}
-		});
+		updateCalendar();
+	}, [date]);
 
-		// update moods
-		const rawDayMoodsResponse = await moodService.getForRange(
-			startDate,
-			endDate
-		);
-		const dayMoodsResponse = rawDayMoodsResponse.data.response;
-		const dayMoods = dayMoodsResponse.data.dateMoods;
-		dayMoods.forEach((dateMood) => {
-			const date = currentDays.find((day) => day.date === dateMood.date);
-			date.moodColor = moodService.getMoodColor(dateMood.mood);
-		});
+	const updateDate = (year, month) => {
+		const dateDay = date.day;
 
-		this.setState({
-			isLoading: false,
-			days: [...currentDays]
-		});
-	}
-
-	async componentDidUpdate(prevProps, prevState) {
-		const prevDate = prevState.date;
-
-		if(prevDate.year !== this.state.date.year || prevDate.month !== this.state.date.month) {
-			await this.updateCalendar();
-		}
-	}
-
-	updateDate = (year, month) => {
-		const { day } = this.state.date;
-
-		this.setState({
-			date: {
-				year,
-				month,
-				day
-			}
+		setDate({
+			year,
+			month,
+			day: dateDay
 		});
 	};
 
-	render() {
-		if (this.state.errorMessages.length > 0) {
-			const alerts = this.state.errorMessages.map((message, index) => {
-				return <Alert alert="danger" message={message} key={index} />;
-			});
-
-			return alerts;
-		}
-
-		if (this.state.isLoading) {
-			return <Spinner />;
-		}
-
-		// display days
-		const calendarRows = [];
-		if (this.state.days.length !== 0) {
-			let next = 0;
-			for (let i = 0; i < 6; i++) {
-				const currentRowDays = [];
-				for (let j = 0; j < 7; j++) {
-					currentRowDays.push(this.state.days[next++]);
-				}
-
-				calendarRows.push(
-					<CalendarRow
-						redirect={this.props.redirect}
-						key={i}
-						days={currentRowDays}
-					/>
-				);
-			}
-		}
-
-		const sideBarDateObject = {
-			year: this.state.date.year || 0,
-			month: this.state.date.month || 0
-		};
-		
-		return (
-			<div>
-				<SideBar date={sideBarDateObject} updateDate={this.updateDate} />
-				<div className={classes.Calendar}>
-					<CalendarHeaderRow />
-					{calendarRows}
-				</div>
-			</div>
-		);
+	if (errorMessages.length > 0) {
+		return errorMessages.map((message, index) => {
+			return <Alert alert="danger" message={message} key={index} />;
+		});
 	}
+
+	if (isLoading) {
+		return <Spinner />;
+	}
+
+	// display days
+	const calendarRows = [];
+	if (days.length !== 0) {
+		let next = 0;
+		for (let i = 0; i < 6; i++) {
+			const currentRowDays = [];
+			for (let j = 0; j < 7; j++) {
+				currentRowDays.push(days[next++]);
+			}
+
+			calendarRows.push(
+				<CalendarRow
+					redirect={props.redirect}
+					key={i}
+					days={currentRowDays}
+				/>
+			);
+		}
+	}
+
+	const sideBarDateObject = {
+		year: date.year || 0,
+		month: date.month || 0
+	};
+
+	return (
+		<div>
+			<SideBar date={sideBarDateObject} updateDate={updateDate} />
+			<div className={classes.Calendar}>
+				<CalendarHeaderRow />
+				{calendarRows}
+			</div>
+		</div>
+	);
 }
 
 export default Calendar;

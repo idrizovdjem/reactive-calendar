@@ -1,16 +1,13 @@
-import React, { Component } from 'react';
 import classes from './CalendarTodo.module.css';
 
-class CalendarTodo extends Component {
-    render() {
-        const style = {
-            backgroundColor: this.props.backgroundColor
-        };
+const CalendarTodo = (props) => {
+    const style = {
+        backgroundColor: props.backgroundColor
+    };
 
-        return (
-            <div style={style} className={classes.TodoRow}></div>
-        );
-    }
+    return (
+        <div style={style} className={classes.TodoRow}></div>
+    );
 }
 
 export default CalendarTodo;

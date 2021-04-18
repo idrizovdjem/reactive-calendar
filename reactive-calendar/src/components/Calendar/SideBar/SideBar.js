@@ -1,45 +1,50 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import classes from './SideBar.module.css';
 
 import DateChanger from '../../DateChanger/DateChanger';
 
-class SideBar extends Component {
-    state = {
-        year: this.props.date.year,
-        month: this.props.date.month
+const SideBar = (props) => {
+    const [year, setYear] = useState(props.date.year);
+    const [month, setMonth] = useState(props.date.month);
+
+    const updateYear = (value) => {
+        const newYear = year + value;
+        setYear(newYear);
+        props.updateDate(newYear, month);
     }
 
-    updateYear = (value) => {
-        const year = this.state.year + value;
-        this.setState({ year });
+    const updateMonth = (value) => {
+        let newMonth = month + value;
+        let newYear = year;
 
-        this.props.updateDate(year, this.state.month);
-    }
-
-    updateMonth = (value) => {
-        let month = this.state.month + value;
-        let year = this.state.year;
-
-        if(month === 0) {
-            month = 12;
-            year--;
-        } else if(month === 13) {
-            month = 1;
-            year++;
+        if (month === 0) {
+            newMonth = 12;
+            newYear--;
+        } else if (month === 13) {
+            newMonth = 1;
+            newYear++;
         }
 
-        this.setState({ year, month });
-        this.props.updateDate(year, month);
+        setMonth(newMonth);
+        setYear(newYear);
+        props.updateDate(newYear, newMonth);
     }
 
-    render() {
-        return (
-            <div className={classes.SideBar}>
-                <DateChanger dateLabel='Year' dateValue={this.state.year} updateDate={this.updateYear} />
-                <DateChanger dateLabel='Month' dateValue={this.state.month} updateDate={this.updateMonth} />
-            </div>
-        );
-    }
+    return (
+        <div className={classes.SideBar}>
+            <DateChanger 
+                dateLabel='Year' 
+                dateValue={year} 
+                updateDate={updateYear} 
+            />
+
+            <DateChanger 
+                dateLabel='Month' 
+                dateValue={month} 
+                updateDate={updateMonth} 
+            />
+        </div>
+    );
 }
 
 export default SideBar;
