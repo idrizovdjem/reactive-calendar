@@ -1,13 +1,21 @@
-.Navigation {
-    width: 100%;
-    background-color: #1E3888;
+.NavigationButton {
+    float: right;
+    background-color: transparent;
+    border: none;
+    font-size: 3.5vh;
+    color: white;
+    margin: 0.5vh 10px;
+    padding-bottom: 0.5vh;
+    border-radius: 10px;
+    transition: background-color 0.2s;
+    outline: none;
 }
 
-.Logo {
-    margin: 0 10px;
-    color: white;
-    font-size: 4.5vh;
+.NavigationButton:hover {
     cursor: pointer;
+    text-decoration: none;
+    background-color: white;
+    color: #406E8E;
 }
 
 .Burger {
@@ -20,6 +28,11 @@
     border-radius: 20px;
     margin-top: 1vh;
     height: 0.5vh;
+}
+
+.MobileButtons {
+    width: 100%;
+    display: none;
 }
 
 @media screen and (max-width: 400px) {

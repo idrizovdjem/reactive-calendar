@@ -1,0 +1,23 @@
+.MobileButtons {
+    width: 100%;
+    display: none;
+}
+
+@media screen and (max-width: 400px) {
+    .MobileButtons {
+        display: block;
+    }
+
+    .MobileLink {
+        width: 100%;
+        font-size: 4vh;
+        padding-left: 2vh;
+        height: 7vh;
+        color: white;
+    }
+
+    .MobileLink:hover {
+        cursor: pointer;
+        background-color: #406E8E;
+    }
+}
