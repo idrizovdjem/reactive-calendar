@@ -7,7 +7,7 @@ async function register(data) {
 
     const response = await axios.post('/users/register', data);
     const result = response.data.response;
-    if(result.successfull) {
+    if(result.ok) {
         const authToken = result.data.authToken;
         persistUserData(authToken);
     }
@@ -22,7 +22,7 @@ async function login(data) {
 
     const response = await axios.post('/users/login', data);
     const result = response.data.response;
-    if(result.successfull) {
+    if(result.ok) {
         const authToken = result.data.authToken;
         persistUserData(authToken);
     }

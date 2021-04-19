@@ -17,7 +17,7 @@ const TodoLabels = (props) => {
             setIsLoading(true);
             const labelsResponse = await labelsService.getAll();
 
-            if (!labelsResponse.successfull) {
+            if (!labelsResponse.ok) {
                 setErrorMessages(labelsResponse.errorMessages);
             } else {
                 const labels = labelsResponse.data.labels.map(label => {

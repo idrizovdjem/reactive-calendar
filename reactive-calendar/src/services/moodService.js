@@ -1,27 +1,18 @@
 import axios from '../axios.js';
 
 async function getForDay(date) {
-    const requestData = buildRequestData({ date });
-    const response = await axios.post('/mood/getForDay', requestData);
+    const response = await axios.get(`/mood/${date}`);
     return response;
 }
 
 async function updateMood(date, mood) {
-    const requestData = buildRequestData({ date, mood });
-    const response = await axios.post('/mood/update', requestData);
+    const response = await axios.patch(`/mood/${date}`, { mood });
     return response;
 }
 
 async function getForRange(startDate, endDate) {
-    const requestData = buildRequestData({ startDate, endDate });
-    const response = await axios.post('/mood/getForRange', requestData);
+    const response = await axios.get(`/mood/range?startDate=${startDate}&endDate=${endDate}`);
     return response;
-}
-
-function buildRequestData(data) {
-    const authToken = localStorage.getItem('authToken');
-    data.authToken = authToken;
-    return data;
 }
 
 function getMoodColor(mood) {

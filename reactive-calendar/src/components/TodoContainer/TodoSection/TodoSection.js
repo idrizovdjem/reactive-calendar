@@ -24,7 +24,7 @@ const TodoSection = (props) => {
             setIsLoading(true);
             const todosResponse = await todoService.getDailyTodos(props.date);
 
-            if (!todosResponse.successfull) {
+            if (!todosResponse.ok) {
                 setErrorMessages(todosResponse.errorMessages);
             } else {
                 setTodos(todosResponse.data.todos);
@@ -53,7 +53,7 @@ const TodoSection = (props) => {
 
         const todoResponse = createTodoResponse.data.response;
 
-        if (!todoResponse.successfull) {
+        if (!todoResponse.ok) {
             setErrorMessages(todoResponse.errorMessages);
         } else {
             const createdTodo = todoResponse.data.todo;

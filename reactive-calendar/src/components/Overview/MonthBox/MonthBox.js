@@ -38,7 +38,7 @@ const MonthBox = (props) => {
                 });
             }
 
-            if (!moodResponse.successfull) {
+            if (!moodResponse.ok) {
                 setErrorMessages(moodResponse.errorMessages);
             } else {
                 setMonthDays(monthDays);

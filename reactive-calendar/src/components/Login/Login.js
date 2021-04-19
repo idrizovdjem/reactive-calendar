@@ -35,7 +35,7 @@ const Login = (props) => {
 
         const result = await authService.login(data);
 
-        if (result.successfull) {
+        if (result.ok) {
             props.redirect(props.history, '/Calendar', true);
         } else {
             setErrorMessages(result.errorMessages);

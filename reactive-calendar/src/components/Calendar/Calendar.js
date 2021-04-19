@@ -44,7 +44,7 @@ const Calendar = (props) => {
 				startDate,
 				endDate
 			);
-			if (!todosResponse.successfull) {
+			if (!todosResponse.ok) {
 				setIsLoading(false);
 				setErrorMessages(todosResponse.errorMessages);
 				return;

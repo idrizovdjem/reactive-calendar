@@ -46,7 +46,7 @@ const Register = (props) => {
 
         const result = await authService.register(data);
 
-        if (result.successfull) {
+        if (result.ok) {
             props.redirect(props.history, '/Calendar', true);
         } else {
             setErrorMessages(result.errorMessages);

@@ -13,7 +13,7 @@ const MoodSelect = (props) => {
 		async function fetchMood() {
 			const rawMoodResponse = await moodService.getForDay(props.date);
 			const moodResponse = rawMoodResponse.data.response;
-			if (!moodResponse.successfull) {
+			if (!moodResponse.ok) {
 				setErrorMessages(moodResponse.errorMessages);
 			}
 
