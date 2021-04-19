@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/reactive-calendar/static/css/main.37e301bf.chunk.css",
-    "main.js": "/reactive-calendar/static/js/main.951e07f4.chunk.js",
-    "main.js.map": "/reactive-calendar/static/js/main.951e07f4.chunk.js.map",
+    "main.css": "/reactive-calendar/static/css/main.c680583b.chunk.css",
+    "main.js": "/reactive-calendar/static/js/main.95bcdde7.chunk.js",
+    "main.js.map": "/reactive-calendar/static/js/main.95bcdde7.chunk.js.map",
     "runtime-main.js": "/reactive-calendar/static/js/runtime-main.d3466883.js",
     "runtime-main.js.map": "/reactive-calendar/static/js/runtime-main.d3466883.js.map",
-    "static/js/2.06172551.chunk.js": "/reactive-calendar/static/js/2.06172551.chunk.js",
-    "static/js/2.06172551.chunk.js.map": "/reactive-calendar/static/js/2.06172551.chunk.js.map",
+    "static/js/2.92b276d2.chunk.js": "/reactive-calendar/static/js/2.92b276d2.chunk.js",
+    "static/js/2.92b276d2.chunk.js.map": "/reactive-calendar/static/js/2.92b276d2.chunk.js.map",
     "index.html": "/reactive-calendar/index.html",
-    "static/css/main.37e301bf.chunk.css.map": "/reactive-calendar/static/css/main.37e301bf.chunk.css.map",
-    "static/js/2.06172551.chunk.js.LICENSE.txt": "/reactive-calendar/static/js/2.06172551.chunk.js.LICENSE.txt"
+    "static/css/main.c680583b.chunk.css.map": "/reactive-calendar/static/css/main.c680583b.chunk.css.map",
+    "static/js/2.92b276d2.chunk.js.LICENSE.txt": "/reactive-calendar/static/js/2.92b276d2.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.d3466883.js",
-    "static/js/2.06172551.chunk.js",
-    "static/css/main.37e301bf.chunk.css",
-    "static/js/main.951e07f4.chunk.js"
+    "static/js/2.92b276d2.chunk.js",
+    "static/css/main.c680583b.chunk.css",
+    "static/js/main.95bcdde7.chunk.js"
   ]
 }
