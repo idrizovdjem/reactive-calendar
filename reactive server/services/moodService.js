@@ -4,31 +4,32 @@ const { Op } = require('sequelize');
 const possibleMoods = ['Excellent', 'Good', 'Average', 'Bad', 'Miserable'];
 
 async function updateMood(userId, date, mood) {
-    const response = {
-        successfull: true,
-        errorMessages: [],
-        data: {}
-    };
-    
-    if(!date) {
+    const response = utilityService.createResponse();
+
+    // validate date
+    if (!date) {
         utilityService.addErrorMessage(response, 'Date is required!');
     } else {
         date = parseInt(date);
-        if(Number.isNaN(date)) {
+        // check if the passed date is int number
+        if (Number.isNaN(date)) {
             utilityService.addErrorMessage(response, 'Invalid date format!');
         }
     }
 
-    if(!mood) {
+    // validate mood
+    if (!mood) {
         utilityService.addErrorMessage(response, 'Mood is required!');
     } else {
         mood = mood.trim();
-        if(!possibleMoods.includes(mood)) {
+        // check if the passed mood is contained in the possibleMoods array
+        if (!possibleMoods.includes(mood)) {
             utilityService.addErrorMessage(response, 'Invalid mood!');
         }
     }
 
-    if(response.successfull) {
+    if (response.ok) {
+        // search the db for dateMood object matching the passed in date and userId
         let dateMood = await DateMood.findOne({
             where: {
                 userId: userId,
@@ -36,19 +37,20 @@ async function updateMood(userId, date, mood) {
             }
         });
 
-        if(dateMood === null) {
-            // create
+        if (dateMood === null) {
+            // if the dateMood object is not found, then create new object
             dateMood = await DateMood.create({
                 userId,
                 date,
                 mood
             });
         } else {
-            // update
+            // otherwise, the found dateObject is updated
             dateMood.mood = mood;
             await dateMood.save();
         }
 
+        // add dateMood object to the response data
         response.data.dateMood = dateMood;
     }
 
@@ -56,22 +58,21 @@ async function updateMood(userId, date, mood) {
 }
 
 async function getMood(userId, date) {
-    const response = {
-        successfull: true,
-        errorMessages: [],
-        data: {}
-    };
+    const response = utilityService.createResponse();
 
-    if(!date) {
+    // validate date
+    if (!date) {
         utilityService.addErrorMessage(response, 'Date is required!');
     } else {
         date = parseInt(date);
-        if(Number.isNaN(date)) {
+        // check if the passed in date is int number
+        if (Number.isNaN(date)) {
             utilityService.addErrorMessage(response, 'Invalid date format!');
         }
     }
 
-    if(response.successfull) {
+    if (response.ok) {
+        // search the db for dateMood object matching the input date and userId
         let dateMood = await DateMood.findOne({
             attributes: ['mood'],
             where: {
@@ -80,7 +81,8 @@ async function getMood(userId, date) {
             }
         });
 
-        if(dateMood === null) {
+        if (dateMood === null) {
+            // if the dateMood object is not found, create new with default mood value 'Average'
             dateMood = await DateMood.create({
                 userId,
                 date,
@@ -88,6 +90,7 @@ async function getMood(userId, date) {
             });
         }
 
+        // add the mood to the response data
         response.data.moodText = dateMood.dataValues.mood;
     }
 
@@ -95,31 +98,32 @@ async function getMood(userId, date) {
 }
 
 async function getForRange(userId, startDate, endDate) {
-    const response = {
-        successfull: true,
-        errorMessages: [],
-        data: {}
-    };
+    const response = utilityService.createResponse();
 
-    if(!startDate) {
+    // validate startDate
+    if (!startDate) {
         utilityService.addErrorMessage(response, 'Start date is required!');
     } else {
         startDate = parseInt(startDate);
-        if(Number.isNaN(startDate)) {
+        // check if the passed in startDate is int number
+        if (Number.isNaN(startDate)) {
             utilityService.addErrorMessage(response, 'Invalid start date format!');
         }
     }
 
-    if(!endDate) {
+    // validate endDate
+    if (!endDate) {
         utilityService.addErrorMessage(response, 'End date is required!');
     } else {
         endDate = parseInt(endDate);
-        if(Number.isNaN(endDate)) {
+        // check if the passed in endDate is int number
+        if (Number.isNaN(endDate)) {
             utilityService.addErrorMessage(response, 'Invalid end date format!');
         }
     }
 
-    if(response.successfull) {
+    if (response.ok) {
+        // search the db for dateMood objects matching userId and date between startDate and endDate
         const dateMoods = await DateMood.findAll({
             attributes: ['mood', 'date'],
             where: {
@@ -130,6 +134,7 @@ async function getForRange(userId, startDate, endDate) {
             }
         });
 
+        // add mapped dateMoods to the response data
         response.data.dateMoods = dateMoods.map(dateMood => {
             const { mood, date } = dateMood.dataValues;
             return { mood, date };
