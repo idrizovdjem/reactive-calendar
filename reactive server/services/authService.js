@@ -3,7 +3,7 @@ const { v4 } = require('uuid');
 const utilityService = require('./utilityService.js');
 
 async function register(email, username, password) {
-    const response = utilityService.createRespone();
+    const response = utilityService.createResponse();
 
     // * simple input data validations
     if (!email) {
@@ -158,7 +158,7 @@ async function isUsernameAvailabale(username) {
 }
 
 async function authenticateUser(authToken) {
-    const response = utilityService.createRespone();
+    const response = utilityService.createResponse();
 
     // check if access token is passed
     if(!authToken) {
