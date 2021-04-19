@@ -4,7 +4,7 @@ const authService = require('../services/authService.js');
 const router = express.Router();
 
 router.use(async (request, response, next) => {
-    const { authToken } = request.body;
+    const authToken= request.headers['x-authorization'];
     const userIdResponse = await authService.authenticateUser(authToken);
     if (!userIdResponse.successfull) {
         response.json({ response: userIdResponse });
@@ -16,22 +16,25 @@ router.use(async (request, response, next) => {
     next();
 });
 
-router.post('/update', async (request, response) => {
-    const { userId, date, mood } = request.body;
+router.get('/range', async (request, response) => {
+    const { startDate, endDate } = request.query;
+    const userId = request.body.userId;
+    const dateMoodsResponse = await moodService.getForRange(userId, startDate, endDate);
+    response.json({ response: dateMoodsResponse });
+});
+
+router.patch('/:date', async (request, response) => {
+    const date = request.params.date;
+    const { userId, mood } = request.body;
     const dateMoodResponse = await moodService.updateMood(userId, date, mood);
     response.json({ response: dateMoodResponse });
 });
 
-router.post('/getForDay', async (request, response) => {
-    const { userId, date } = request.body;
+router.get('/:date', async (request, response) => {
+    const date = request.params.date;
+    const userId = request.body.userId;
     const dateMoodResponse = await moodService.getMood(userId, date);
     response.json({ response: dateMoodResponse });
-});
-
-router.post('/getForRange', async (request, response) => {
-    const { userId, startDate, endDate } = request.body;
-    const dateMoodsResponse = await moodService.getForRange(userId, startDate, endDate);
-    response.json({ response: dateMoodsResponse });
 });
 
 module.exports = router;

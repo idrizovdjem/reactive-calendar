@@ -14,7 +14,7 @@ async function register(email, username, password) {
         utilityService.addErrorMessage(response, 'Invalid email!');
     } else {
         if (await isEmailAvailable(email) === false) {
-            utilityService.addErrorMessage(response, 'This username is already taken!');
+            utilityService.addErrorMessage(response, 'This email is already taken!');
         }
     }
 

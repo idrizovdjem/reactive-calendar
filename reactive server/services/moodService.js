@@ -121,6 +121,7 @@ async function getForRange(userId, startDate, endDate) {
 
     if(response.successfull) {
         const dateMoods = await DateMood.findAll({
+            attributes: ['mood', 'date'],
             where: {
                 userId: userId,
                 date: {
@@ -129,7 +130,10 @@ async function getForRange(userId, startDate, endDate) {
             }
         });
 
-        response.data.dateMoods = dateMoods;
+        response.data.dateMoods = dateMoods.map(dateMood => {
+            const { mood, date } = dateMood.dataValues;
+            return { mood, date };
+        });
     }
 
     return response;
