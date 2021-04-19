@@ -30,6 +30,7 @@ async function seedLabels(Label) {
 
     for(const label of labels) {
         const { backgroundColor, color, text } = label;
+        // check if the current label is already created
         const isCreatedResponse = await Label.findOne({
             attributes: ['id'],
             where: {
@@ -38,6 +39,7 @@ async function seedLabels(Label) {
         });
 
         if(isCreatedResponse === null) {
+            // if the label is not created, create new label object
             await Label.create({ backgroundColor, color, text });
         }
     }
