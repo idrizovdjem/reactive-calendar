@@ -21,6 +21,11 @@ const EditableTodo = (props) => {
         todoService.updateTodo(props.todo.id, title, description);
         props.edit(title, description);
     }
+
+    const cancelChanges = (event) => {
+        event.preventDefault();
+        props.toggleEdit();
+    }
     
     const descriptionElement = (
         <textarea
@@ -48,7 +53,7 @@ const EditableTodo = (props) => {
             <div className={classes.EditButtonsContainer} >
                 <button className={`${classes.EditButton} ${classes.SaveChanges}`}>Save changes</button>
 
-                <button onClick={props.toggleEdit} className={`${classes.EditButton} ${classes.Cancel}`}>Cancel</button>
+                <button onClick={cancelChanges} className={`${classes.EditButton} ${classes.Cancel}`}>Cancel</button>
             </div>
             {descriptionElement}
         </form>

@@ -31,6 +31,7 @@ const Todo = (props) => {
                 todo={props.todo}
                 edit={updateTodo}
                 delete={deleteTodoHandler}
+                toggleEdit={toggleEditableState}
             />
         );
     }
