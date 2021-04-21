@@ -201,6 +201,7 @@ function getCurrentDate() {
 }
 
 function getMonthRange(year, month) {
+    // get month start date(may include previous month) and end date(may include next month)
     const monthDays = getCalendarDays(year, month);
 
     return {
@@ -214,6 +215,7 @@ function getCurrentYear() {
 }
 
 function getMonthData(year, month) {
+    // get month start and end date
     const currentDate = dayjs(`${year}/${month}/01`);
     let totalDays = currentDate.daysInMonth();
     let convertedMonth = month < 10 ? `0${month}` : month;
