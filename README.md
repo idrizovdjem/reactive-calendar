@@ -19,3 +19,14 @@ If you have any suggestions about my code you are welcome to contact me or just 
 
 ### Try the application
 [Live application link](https://idrizovdjem.github.io/reactive-calendar/)
+
+## Technologies used
+<img src="https://raw.githubusercontent.com/voodootikigod/logo.js/master/js.png" width="50" height="50">
+<img src="https://www.ict.social/images/5728/nodejs_logo.png" width="50" height="50">
+<img src="https://clipground.com/images/react-logo-png-7.png" width="50" height="50">
+<img src="https://cdn2.iconfinder.com/data/icons/metro-uinvert-dock/256/HTML5.png" width="50" height="50">
+<img src="https://img.icons8.com/color/1600/css3.png" width="50" height="50">
+<img src="https://cdn.iconscout.com/icon/free/png-256/bootstrap-6-1175203.png" width="50" height="50">
+<img src="https://th.bing.com/th/id/R5d550dbc616db9c551a41c1c378f0696?rik=ywXt3T8WE1Fg1w&pid=ImgRaw" width="50" height="50">
+<img src="https://cdn.freebiesupply.com/logos/thumbs/2x/react-router-logo.png" width="50" height="50">
+<img src="https://th.bing.com/th/id/Ree1369e96e441ad0119530d10264b8b4?rik=zvKQTSwXTP8sqg&pid=ImgRaw" width="50" height="50">
